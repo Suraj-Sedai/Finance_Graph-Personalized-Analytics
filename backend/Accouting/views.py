@@ -4,8 +4,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from .models import Transaction
 from .serializers import TransactionSerializer
+
+class UserTransactionListView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)
+    
 
 class TransactionView(APIView):
     permission_classes = [IsAuthenticated]
