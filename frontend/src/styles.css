@@ -1,0 +1,272 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/* Body Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1f2023, #2f3640);
+  color: #dcdde1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  transition: background-color 0.5s ease;
+  text-align: center;
+}
+
+.home_page {
+  height: 96vh;
+  width: 200vh;
+  background: linear-gradient(150deg, #1f2023, #2f3640);
+  color: #dcdde1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: background-color 0.5s ease;
+  text-align: center;
+}
+
+/* Header Styles */
+h1 {
+  font-size: 36px;
+  color: #4CAF50;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+/* Profile Styles */
+.user {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #2f2f36;
+  border-radius: 50%;
+  padding: 20px;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user:hover {
+  transform: scale(1.1);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+}
+
+.user span {
+  font-size: 40px;
+  color: #fff;
+}
+
+.user p {
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Logout Button */
+.logout {
+  display: none;
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 16px;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, bottom 0.4s ease;
+}
+
+.user.active .logout {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  bottom: -40px;
+}
+
+.logout:hover {
+  background-color: #45a049;
+}
+
+.user span {
+  font-size: 40px;
+  color: #fff;
+}
+
+.user p {
+  margin-top: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+}
+.user .logout {
+  left: 50%;
+  transform: translateX(-50%); /* Ensures it is always centered */
+}
+/* Navigation Button Styles */
+.nav {
+  display: inline-flex;
+  margin: 20px;
+  gap: 30px;
+}
+.nav_btn {
+  font-size: 24px;
+  background-color: #4CAF50;
+  padding: 12px 24px;
+  border-radius: 25px;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.nav_btn:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+}
+
+.nav_btn:active {
+  transform: translateY(1px);
+}
+
+/* Recent Transactions Section */
+.sec_page {
+  /**/
+  height: 100vh;
+  width: 200vh;
+  background: linear-gradient(150deg, #1f2023, #2f3640);
+  color: #dcdde1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: background-color 0.5s ease;
+  text-align: center;
+}
+
+.trans {
+  background-color: #2f3640;
+  padding: 20px;
+  border-radius: 15px;
+  width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-height: 70vh;
+  float: right;
+  color: #fff;
+  margin: 60px;
+}
+
+.trans h2 {
+  font-size: 24px;
+  color: #4CAF50;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #333;
+  color: #dcdde1;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+ul li:hover {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.trans p {
+  font-size: 18px;
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .trans {
+    width: 80%;
+    right: 10px;
+  }
+
+  .nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav_btn {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+/* Input and Button Styles for Forms */
+input, select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #2f3640;
+  color: #dcdde1;
+  font-size: 16px;
+}
+
+input:focus,
+select:focus {
+  background-color: #333;
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+button:active {
+  background-color: #388e3c;
+  transform: translateY(1px);
+}
