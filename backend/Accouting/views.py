@@ -8,20 +8,18 @@ from rest_framework.generics import ListAPIView
 from .models import Transaction
 from .serializers import TransactionSerializer
 
-class UserTransactionListView(ListAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return Transaction.objects.filter(user=self.request.user)
-    
-
 class TransactionView(APIView):
     permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        transactions = Transaction.objects.filter(user=request.user)  # Fetch only user's data
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)  # Associate the transaction with the authenticated user
+            serializer.save(user=request.user)  # Save the transaction with the current user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -33,8 +31,14 @@ def add_transaction(request):
             serializer.save(user=request.user)  # Save transaction with the authenticated user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class TransactionViewSet(viewsets.ModelViewSet):
-    queryset = Transaction.objects.all()
+    queryset = Transaction.objects.all()  # Ensure this is defined
     serializer_class = TransactionSerializer
-    permission_classes = [IsAuthenticated]  # Restrict access to authenticated users
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Transaction.objects.filter(user=self.request.user)  # Only show user's transactions
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)  # Save with authenticated user
+    

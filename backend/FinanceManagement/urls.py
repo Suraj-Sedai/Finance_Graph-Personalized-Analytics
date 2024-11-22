@@ -21,8 +21,8 @@ from Accouting.views import TransactionViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
-router.register(r'transactions', TransactionViewSet)
 
+router.register(r'transactions', TransactionViewSet, basename='transaction')
 
 
 urlpatterns = [
