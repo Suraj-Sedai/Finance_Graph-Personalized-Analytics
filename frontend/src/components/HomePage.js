@@ -1,8 +1,8 @@
-// src/components/HomePage.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import FinancialAnalytics from './FinancialAnalytics'; // Import FinancialAnalytics component
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -60,9 +60,8 @@ const HomePage = () => {
                         <button className='nav_btn'>View All Transactions</button>
                     </Link>
                 </div>
-
-                
             </section>
+
             <section className='sec_page'>
                 <div className='trans'>
                     <h2>Recent Transactions</h2>
@@ -78,7 +77,13 @@ const HomePage = () => {
                         <p>No recent transactions found.</p>
                     )}
                 </div>
+                
+                {/* Add Financial Analytics Section */}
+                <div className="financial-analytics-section">
+                    <FinancialAnalytics />
+                </div>
             </section>
+
         </div>
     );
 };

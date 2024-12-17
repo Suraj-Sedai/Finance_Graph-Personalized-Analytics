@@ -270,3 +270,8 @@ button:active {
   background-color: #388e3c;
   transform: translateY(1px);
 }
+
+.financial-analytics-section{
+  width: 50%;
+  
+}
