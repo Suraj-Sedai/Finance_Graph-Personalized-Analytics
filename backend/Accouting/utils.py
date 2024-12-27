@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import io
 from django.http import HttpResponse
+import matplotlib
+matplotlib.use('Agg')  # Use a non-interactive backend
+import matplotlib.pyplot as plt
+
 
 class PieChartGenerator:
     @staticmethod

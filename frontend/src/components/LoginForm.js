@@ -29,15 +29,16 @@ const LoginForm = () => {
         } catch (error) {
             // Handle login failure
             console.error('Error logging in:', error);
-            alert('Login failed, please check your credentials.');
+            //alert('Login failed, please check your credentials.');
         }
     };
 
     return (
-        <div className="login_form">
-            <form onSubmit={handleSubmit}>
-                <h2 className='heading1'>Login</h2>
+        <div className="login_container">
+            <form className="login_form" onSubmit={handleSubmit}>
+                <h2 className="form_heading">Login</h2>
                 <input
+                    className="form_input"
                     type="text"
                     placeholder="Username"
                     value={username}
@@ -45,14 +46,17 @@ const LoginForm = () => {
                     required
                 />
                 <input
+                    className="form_input"
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button className='login' type="submit">Login</button>
-                <p>Don't have an account? <a href='/signup'>Create new</a></p>
+                <button className="form_button" type="submit">Login</button>
+                <p className="form_text">
+                    Don't have an account? <a href="/signup" className="form_link">Create new</a>
+                </p>
             </form>
         </div>
     );

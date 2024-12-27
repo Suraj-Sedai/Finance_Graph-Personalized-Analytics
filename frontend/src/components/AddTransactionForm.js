@@ -37,7 +37,7 @@ const AddTransactionForm = () => {
             .post('http://127.0.0.1:8000/api/transactions/', transactionData, {
                 headers: { Authorization: `Bearer ${token}` },
             })
-            .then((response) => {
+            .then(() => {
                 alert('Transaction added successfully!');
                 setDescription('');
                 setAmount('');
@@ -51,67 +51,64 @@ const AddTransactionForm = () => {
                     localStorage.clear();
                     navigate('/login');
                 } else {
-                    console.error(error);
                     setError(error.response?.data?.detail || 'Failed to add transaction.');
                 }
             });
     };
 
     return (
-        <div>
-            <button onClick={() => navigate('/home')}>
-                <span className="material-symbols-outlined">arrow_back</span> Back
+        <div className="transaction_container">
+            <button className="back_button" onClick={() => navigate('/home')}>
+            <span class="material-symbols-outlined">
+arrow_back_2
+</span> Back
             </button>
-            <div className="user">
-                <span className="material-symbols-outlined">account_circle</span>
+            <div className="user_info">
+                <span className="material-symbols-outlined user_icon">account_circle</span>
                 <p>{username}</p>
             </div>
-            <div className="add-transaction-form">
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <h2 className="heading2">Add a New Transaction</h2>
-                    <div>
-                        <input
-                            placeholder="Description"
-                            type="text"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <input
-                            placeholder="Amount"
-                            type="number"
-                            value={amount}
-                            onChange={(e) => setAmount(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            required
-                        >
-                            <option value="">Select a category</option>
-                            {categories.map((categoryOption, index) => (
-                                <option key={index} value={categoryOption}>
-                                    {categoryOption}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                    <div>
-                        <input
-                            placeholder="Date"
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button className="login" type="submit">
+            <div className="transaction_form_wrapper">
+                {error && <p className="error_message">{error}</p>}
+                <form className="transaction_form" onSubmit={handleSubmit}>
+                    <h2 className="form_heading">Add a New Transaction</h2>
+                    <input
+                        className="form_input"
+                        placeholder="Description"
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        required
+                    />
+                    <input
+                        className="form_input"
+                        placeholder="Amount"
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        required
+                    />
+                    <select
+                        className="form_select"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        required
+                    >
+                        <option value="">Select a category</option>
+                        {categories.map((categoryOption, index) => (
+                            <option key={index} value={categoryOption}>
+                                {categoryOption}
+                            </option>
+                        ))}
+                    </select>
+                    <input
+                        className="form_input"
+                        placeholder="Date"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
+                    />
+                    <button className="form_button" type="submit">
                         Add Transaction
                     </button>
                 </form>

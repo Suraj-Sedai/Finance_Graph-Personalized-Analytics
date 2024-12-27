@@ -2,8 +2,11 @@ from rest_framework import serializers
 from .models import Transaction
 
 class TransactionSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.username')  # To show the username of the owner
-
     class Meta:
         model = Transaction
-        fields = ['id', 'user', 'description', 'amount', 'date', 'category']
+        fields = ['description', 'amount', 'category', 'date']
+
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Amount must be greater than zero.")
+        return value

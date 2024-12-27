@@ -77,13 +77,16 @@ const HomePage = () => {
                         <p>No recent transactions found.</p>
                     )}
                 </div>
-                
-                {/* Add Financial Analytics Section */}
-                <div className="financial-analytics-section">
-                    <FinancialAnalytics />
+
+                {/* Two separate containers for Financial Analytics and Pie Chart */}
+                <div className="analytics-and-chart">
+                    <div className="financial-analytics-container">
+                        <FinancialAnalytics />
+                    </div>
+
+
                 </div>
             </section>
-
         </div>
     );
 };

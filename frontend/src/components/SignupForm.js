@@ -27,10 +27,11 @@ const SignupForm = () => {
     };
 
     return (
-        <div className="signup_form">
-            <form onSubmit={handleSubmit}>
-                <h2 className='heading1'>Sign Up</h2>
+        <div className="signup_container">
+            <form className="signup_form" onSubmit={handleSubmit}>
+                <h2 className="form_heading">Sign Up</h2>
                 <input
+                    className="form_input"
                     type="text"
                     placeholder="Username"
                     value={username}
@@ -38,14 +39,17 @@ const SignupForm = () => {
                     required
                 />
                 <input
+                    className="form_input"
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button className='signup' type="submit">Sign Up</button>
-                <p>Already have an account? <a href='/login'>Log in</a></p>
+                <button className="form_button" type="submit">Sign Up</button>
+                <p className="form_text">
+                    Already have an account? <a href="/login" className="form_link">Log in</a>
+                </p>
             </form>
         </div>
     );

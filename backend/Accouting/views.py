@@ -15,11 +15,10 @@ from .models import Transaction
 from .serializers import TransactionSerializer
 from .utils import PieChartGenerator  # Import the utility class
 
-from django.http import HttpResponse
-
 # Define a simple homepage view
 def home(request):
     return HttpResponse("Welcome to the Finance Management API!")
+
 # Endpoint to get financial data (total spending, average spending)
 class FinancialDataView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
@@ -47,6 +46,7 @@ class FinancialDataView(APIView):
 
         return Response(data)
 
+# View for generating spending by category pie chart
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def category_spending_pie_chart(request):
@@ -74,6 +74,7 @@ def category_spending_pie_chart(request):
     except Exception as e:
         return Response({"error": f"An error occurred while generating the chart: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Register user endpoint
 class RegisterView(APIView):
     permission_classes = [AllowAny]  # Allow access to anyone
 
@@ -91,6 +92,7 @@ class RegisterView(APIView):
         User.objects.create_user(username=username, password=password)
         return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
 
+# Transaction view for handling GET and POST requests (single view for transactions)
 class TransactionView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -106,15 +108,7 @@ class TransactionView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def add_transaction(request):
-    serializer = TransactionSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save(user=request.user)  # Save transaction with the authenticated user
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+# Transaction viewset (optional, can be used for more complex CRUD functionality)
 class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]

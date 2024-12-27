@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// A simple reusable component to display error messages
+const ErrorMessage = ({ message }) => {
+    return <p className="error">{message}</p>;
+};
+
 const FinancialAnalytics = () => {
     const [financialData, setFinancialData] = useState({});
     const [chartData, setChartData] = useState(null);
@@ -9,6 +14,7 @@ const FinancialAnalytics = () => {
     const [error, setError] = useState({ financial: null, chart: null });
 
     useEffect(() => {
+        // Fetch financial data
         axios
             .get('http://localhost:8000/api/financial-data/', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
@@ -22,7 +28,9 @@ const FinancialAnalytics = () => {
                 setLoadingFinancialData(false);
             });
 
-            axios.get('http://localhost:8000/api/pie-chart/', {
+        // Fetch chart data
+        axios
+            .get('http://localhost:8000/api/pie-chart/', {
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 responseType: 'blob', // Get binary data
             })
@@ -30,17 +38,23 @@ const FinancialAnalytics = () => {
                 const imageUrl = URL.createObjectURL(response.data);
                 setChartData(imageUrl);
                 setLoadingChartData(false);
+            })
+            .catch(() => {
+                setError((prev) => ({ ...prev, chart: 'Unable to fetch pie chart data.' }));
+                setLoadingChartData(false);
             });
     }, []);
 
-    if (loadingFinancialData || loadingChartData) return <div>Loading...</div>;
+    if (loadingFinancialData || loadingChartData) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <div>
-            <div className="trans">
+        <div className="analytics-and-chart">
+            <div className="financial-analytics-container">
                 <h1>Finance Analytics</h1>
                 {error.financial ? (
-                    <p className="error">{error.financial}</p>
+                    <ErrorMessage message={error.financial} />
                 ) : (
                     <>
                         <h2>Total Spending: ${financialData.total_spending}</h2>
@@ -60,15 +74,15 @@ const FinancialAnalytics = () => {
                     </>
                 )}
             </div>
-            <div>
+
+            <div className="pie-chart-container">
                 <h3>Your Spending by Category</h3>
                 {error.chart ? (
-                    <p className="error">{error.chart}</p>
+                    <ErrorMessage message={error.chart} />
                 ) : chartData ? (
                     <img src={chartData} alt="Category Spending Pie Chart" />
-
                 ) : (
-                    <p>Pie chart data not available</p>
+                    <p>Pie chart data not available.</p>
                 )}
             </div>
         </div>

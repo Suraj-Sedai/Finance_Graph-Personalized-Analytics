@@ -8,91 +8,171 @@
 
 /* Body Styles */
 body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1f2023, #2f3640);
-  color: #dcdde1;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+  color: #2c3e50;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  transition: background-color 0.5s ease;
   text-align: center;
 }
 
+/* Home Page Container */
 .home_page {
-  height: 96vh;
-  width: 200vh;
-  background: linear-gradient(150deg, #1f2023, #2f3640);
-  color: #dcdde1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  transition: background-color 0.5s ease;
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
   text-align: center;
+  padding: 20px;
 }
 
 /* Header Styles */
 h1 {
-  font-size: 36px;
-  color: #4CAF50;
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-size: 2.5rem;
+  color: #34495e;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
 
 h2 {
-  font-size: 28px;
-  color: #fff;
-  margin-bottom: 20px;
+  font-size: 1.8rem;
+  color: #34495e;
+  margin-bottom: 15px;
+  font-weight: 500;
 }
-/* Profile Styles */
+
+/* Section Styles */
+.sec_page {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+/* Financial Analytics and Pie Chart Section */
+.analytics-and-chart {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: 40px;
+  flex-wrap: wrap;  /* Ensures responsiveness on smaller screens */
+}
+
+/* Financial Analytics Section */
+.financial-analytics-container {
+  flex: 1 1 48%;  /* Adjusts width to 48% for side-by-side layout */
+  min-width: 300px; /* Ensure minimum width for responsiveness */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.financial-analytics-container h3 {
+  font-size: 1.3rem;
+  color: #34495e;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.financial-analytics-container ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.financial-analytics-container li {
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Pie Chart Section */
+.pie-chart-container {
+  flex: 1 1 48%;  /* Adjusts width to 48% for side-by-side layout */
+  min-width: 300px; /* Ensure minimum width for responsiveness */
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pie-chart-container img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+  .analytics-and-chart {
+    flex-direction: column;  /* Stack sections on smaller screens */
+    align-items: center;
+  }
+
+  .financial-analytics-container,
+  .pie-chart-container {
+    flex: 1 1 100%;  /* Take full width on mobile */
+    margin-bottom: 20px;
+  }
+}
+
+/* User Profile Styles */
 .user {
   position: fixed;
   top: 20px;
   right: 20px;
-  background-color: #2f2f36;
+  background-color: #ecf0f1;
   border-radius: 50%;
-  padding: 20px;
-  width: 90px;
-  height: 90px;
+  padding: 15px;
+  width: 70px;
+  height: 70px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .user:hover {
   transform: scale(1.1);
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .user span {
-  font-size: 40px;
-  color: #fff;
+  font-size: 35px;
+  color: #34495e;
 }
 
 .user p {
-  margin-top: 10px;
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
+  margin-top: 8px;
+  color: #34495e;
+  font-weight: 500;
+  font-size: 0.9rem;
 }
 
 /* Logout Button */
 .logout {
   display: none;
   position: absolute;
-  bottom: -60px;
+  bottom: -50px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #4CAF50;
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-size: 16px;
+  background-color: #e74c3c;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 0.9rem;
   color: #fff;
   cursor: pointer;
   border: none;
@@ -109,34 +189,21 @@ h2 {
 }
 
 .logout:hover {
-  background-color: #45a049;
+  background-color: #c0392b;
 }
 
-.user span {
-  font-size: 40px;
-  color: #fff;
-}
-
-.user p {
-  margin-top: 10px;
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
-}
-.user .logout {
-  left: 50%;
-  transform: translateX(-50%); /* Ensures it is always centered */
-}
-/* Navigation Button Styles */
+/* Navigation Buttons */
 .nav {
-  display: inline-flex;
-  margin: 20px;
-  gap: 30px;
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+  gap: 20px;
 }
+
 .nav_btn {
-  font-size: 24px;
-  background-color: #4CAF50;
-  padding: 12px 24px;
+  font-size: 1.2rem;
+  background-color: #3498db;
+  padding: 12px 30px;
   border-radius: 25px;
   color: #fff;
   cursor: pointer;
@@ -145,133 +212,171 @@ h2 {
 }
 
 .nav_btn:hover {
-  background-color: #45a049;
-  transform: scale(1.1);
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+  background-color: #2980b9;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .nav_btn:active {
   transform: translateY(1px);
 }
 
-/* Recent Transactions Section */
-.sec_page {
-  /**/
-  height: 100vh;
-  width: 200vh;
-  background: linear-gradient(150deg, #1f2023, #2f3640);
-  color: #dcdde1;
+/* Login Form Container */
+.login_container {
+  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  transition: background-color 0.5s ease;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* Login Form Styles */
+.login_form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
   text-align: center;
 }
 
-.trans {
-  background-color: #2f3640;
-  padding: 20px;
-  border-radius: 15px;
-  width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  max-height: 70vh;
-  float: right;
-  color: #fff;
-  margin: 60px;
-}
-
-.trans h2 {
-  font-size: 24px;
-  color: #4CAF50;
+.form_heading {
+  font-size: 2rem;
+  color: #34495e;
   margin-bottom: 20px;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-ul li {
-  background-color: #333;
-  color: #dcdde1;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
-}
-
-ul li:hover {
-  background-color: #4CAF50;
-  color: #fff;
-}
-
-.trans p {
-  font-size: 18px;
-  color: #aaa;
-  font-style: italic;
-}
-
-/* Responsive Design */
-@media (max-width: 480px) {
-  .trans {
-    width: 80%;
-    right: 10px;
-  }
-
-  .nav {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .nav_btn {
-    width: 100%;
-    margin: 10px 0;
-  }
-}
-
-/* Input and Button Styles for Forms */
-input, select {
+.form_input {
   width: 100%;
-  padding: 12px 20px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  background-color: #2f3640;
-  color: #dcdde1;
-  font-size: 16px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus,
-select:focus {
-  background-color: #333;
-  border-color: #4CAF50;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+.form_input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
 }
 
-button {
+.form_button {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #3498db;
+  color: #ffffff;
   border: none;
-  border-radius: 30px;
-  font-size: 18px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button:hover {
-  background-color: #45a049;
-  transform: translateY(-2px);
+.form_button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
 }
 
-button:active {
-  background-color: #388e3c;
+.form_button:active {
   transform: translateY(1px);
 }
 
-.financial-analytics-section{
-  width: 50%;
-  
+.form_text {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.form_link {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.form_link:hover {
+  color: #2980b9;
+}
+
+/* Signup Form Container */
+.signup_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+}
+
+/* Signup Form Styles */
+.signup_form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.form_heading {
+  font-size: 2rem;
+  color: #34495e;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.form_input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ecf0f1;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form_input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.form_button {
+  width: 100%;
+  padding: 12px;
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.form_button:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.form_button:active {
+  transform: translateY(1px);
+}
+
+.form_text {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #34495e;
+}
+
+.form_link {
+  color: #3498db;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.form_link:hover {
+  color: #2980b9;
 }
