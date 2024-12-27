@@ -1,6 +1,5 @@
 from django.apps import AppConfig
 
-
-class AccoutingConfig(AppConfig):
+class AccountingConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'Accouting'
+    name = 'Accouting'  # Ensure this matches the app folder name

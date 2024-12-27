@@ -13,7 +13,13 @@ import matplotlib.pyplot as plt
 import io
 from .models import Transaction
 from .serializers import TransactionSerializer
+from .utils import PieChartGenerator  # Import the utility class
 
+from django.http import HttpResponse
+
+# Define a simple homepage view
+def home(request):
+    return HttpResponse("Welcome to the Finance Management API!")
 # Endpoint to get financial data (total spending, average spending)
 class FinancialDataView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
@@ -41,48 +47,33 @@ class FinancialDataView(APIView):
 
         return Response(data)
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def category_spending_pie_chart(request):
-    # Query all transactions for the authenticated user
     transactions = Transaction.objects.filter(user=request.user)
-
-    # Aggregate spending by category directly in the database
     category_data = (
         transactions.values('category')
         .annotate(total_amount=Sum('amount'))
         .order_by('category')
     )
 
-    # If no data exists, return an appropriate message
     if not category_data:
         return Response({"message": "No data available to create the pie chart."}, status=status.HTTP_200_OK)
 
-    # Extract category names and total amounts
     categories = [entry['category'] for entry in category_data]
     amounts = [entry['total_amount'] for entry in category_data]
 
     try:
-        # Plot pie chart
-        fig, ax = plt.subplots(figsize=(6, 4))  # Set the figure size
-        ax.pie(amounts, labels=categories, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff','#99ff99','#ffcc99','#c2c2f0'])
-        ax.axis('equal')  # Equal aspect ratio ensures that pie chart is circular.
+        # Use PieChartGenerator to create the pie chart
+        buffer = PieChartGenerator.create_pie_chart(categories, amounts, title="Your Spending by Category")
 
-        # Save the plot to an image in memory
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-
-        # Close the plot to free up memory
-        plt.close(fig)
-
-        # Return the image as a response
+        # Return the image as an HTTP response
         return HttpResponse(buffer, content_type='image/png')
-    
+    except ValueError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
-        # Handle errors in generating the chart
         return Response({"error": f"An error occurred while generating the chart: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class RegisterView(APIView):
     permission_classes = [AllowAny]  # Allow access to anyone
 

@@ -2,40 +2,76 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const FinancialAnalytics = () => {
-    const [data, setData] = useState({});
-    const [loading, setLoading] = useState(true);
+    const [financialData, setFinancialData] = useState({});
+    const [chartData, setChartData] = useState(null);
+    const [loadingFinancialData, setLoadingFinancialData] = useState(true);
+    const [loadingChartData, setLoadingChartData] = useState(true);
+    const [error, setError] = useState({ financial: null, chart: null });
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/financial-data/', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`  // Ensure you're passing the auth token
-            }
-        })
-        .then(response => {
-            setData(response.data);
-            setLoading(false);
-        })
-        .catch(error => console.error(error));
+        axios
+            .get('http://localhost:8000/api/financial-data/', {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            })
+            .then((response) => {
+                setFinancialData(response.data);
+                setLoadingFinancialData(false);
+            })
+            .catch(() => {
+                setError((prev) => ({ ...prev, financial: 'Unable to fetch financial data.' }));
+                setLoadingFinancialData(false);
+            });
+
+            axios.get('http://localhost:8000/api/pie-chart/', {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                responseType: 'blob', // Get binary data
+            })
+            .then((response) => {
+                const imageUrl = URL.createObjectURL(response.data);
+                setChartData(imageUrl);
+                setLoadingChartData(false);
+            });
     }, []);
 
-    if (loading) return <div>Loading...</div>;
+    if (loadingFinancialData || loadingChartData) return <div>Loading...</div>;
 
     return (
         <div>
-            <div className='trans'>
-            <h1>Finance Analytics</h1>
-            <h2>Total Spending: ${data.total_spending}</h2>
-            <h2>Average Spending: ${data.average_spending}</h2>
-            <h2>Spending by Category:</h2>
-            <ul>
-                {data.categories.map((cat, index) => (
-                    <li key={index}>{cat.category}: ${cat.total_amount}</li>
-                ))}
-            </ul>
+            <div className="trans">
+                <h1>Finance Analytics</h1>
+                {error.financial ? (
+                    <p className="error">{error.financial}</p>
+                ) : (
+                    <>
+                        <h2>Total Spending: ${financialData.total_spending}</h2>
+                        <h2>Average Spending: ${financialData.average_spending}</h2>
+                        <h2>Spending by Category:</h2>
+                        {financialData.categories.length > 0 ? (
+                            <ul>
+                                {financialData.categories.map((cat, index) => (
+                                    <li key={index}>
+                                        {cat.category}: ${cat.total_amount}
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No spending data available.</p>
+                        )}
+                    </>
+                )}
             </div>
-            <h2>Spending by Category (Pie Chart)</h2>
-            <img src="http://localhost:8000/api/category-pie-chart/" alt="Category Spending Pie Chart" />
+            <div>
+                <h3>Your Spending by Category</h3>
+                {error.chart ? (
+                    <p className="error">{error.chart}</p>
+                ) : chartData ? (
+                    <img src={chartData} alt="Category Spending Pie Chart" />
+
+                ) : (
+                    <p>Pie chart data not available</p>
+                )}
             </div>
+        </div>
     );
 };
 
