@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'Accouting',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',  # for token-based auth
+
 ]
 
 MIDDLEWARE = [
@@ -81,13 +83,15 @@ WSGI_APPLICATION = 'FinanceManagement.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Token authentication
+        'rest_framework.authentication.SessionAuthentication',  # For browsable API login
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',  # Default permission
     ],
 }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
