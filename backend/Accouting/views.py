@@ -14,6 +14,10 @@ import io
 from .models import Transaction
 from .serializers import TransactionSerializer
 from .utils import PieChartGenerator  # Import the utility class
+import logging
+
+# Set up logger
+logger = logging.getLogger(__name__)
 
 # Define a simple homepage view
 def home(request):
@@ -58,7 +62,7 @@ def category_spending_pie_chart(request):
     )
 
     if not category_data:
-        return Response({"message": "No data available to create the pie chart."}, status=status.HTTP_200_OK)
+        return Response({"message": "No data available to create the pie chart."}, status=status.HTTP_204_NO_CONTENT)
 
     categories = [entry['category'] for entry in category_data]
     amounts = [entry['total_amount'] for entry in category_data]
@@ -72,6 +76,7 @@ def category_spending_pie_chart(request):
     except ValueError as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
+        logger.error(f"Error generating pie chart: {str(e)}")  # Log the error
         return Response({"error": f"An error occurred while generating the chart: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Register user endpoint
@@ -93,20 +98,31 @@ class RegisterView(APIView):
         return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
 
 # Transaction view for handling GET and POST requests (single view for transactions)
+
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from .models import Transaction
+from .serializers import TransactionSerializer
+
 class TransactionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        transactions = Transaction.objects.filter(user=request.user)  # Fetch only user's data
+        transactions = Transaction.objects.filter(user=request.user)
         serializer = TransactionSerializer(transactions, many=True)
         return Response(serializer.data)
 
     def post(self, request):
-        serializer = TransactionSerializer(data=request.data)
+        transaction_data = request.data
+        transaction_data['user'] = request.user.id
+        serializer = TransactionSerializer(data=transaction_data, context={'request': request})
+
         if serializer.is_valid():
-            serializer.save(user=request.user)  # Save the transaction with the current user
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()
+            return Response({"message": "Transaction added successfully!", "transaction": serializer.data}, status=201)
+        return Response(serializer.errors, status=400)
+
 
 # Transaction viewset (optional, can be used for more complex CRUD functionality)
 class TransactionViewSet(viewsets.ModelViewSet):

@@ -21,17 +21,19 @@ const AddTransactionForm = () => {
             return;
         }
 
-        if (amount <= 0) {
-            setError('Amount must be greater than zero.');
+        if (amount <= 0 || isNaN(amount)) {  // Additional check for NaN
+            setError('Amount must be a valid number greater than zero.');
             return;
         }
 
         const transactionData = {
             description,
-            amount,
+            amount: parseFloat(amount),  // Convert to number
             category,
             date,
         };
+
+        console.log("Sending transaction data:", transactionData);  // Debugging log
 
         axios
             .post('http://127.0.0.1:8000/api/transactions/', transactionData, {
@@ -46,6 +48,7 @@ const AddTransactionForm = () => {
                 setError('');
             })
             .catch((error) => {
+                console.log("Error response:", error.response);  // Log the error response for debugging
                 if (error.response?.status === 401) {
                     alert('Session expired. Please log in again.');
                     localStorage.clear();
@@ -59,9 +62,7 @@ const AddTransactionForm = () => {
     return (
         <div className="transaction_container">
             <button className="back_button" onClick={() => navigate('/home')}>
-            <span class="material-symbols-outlined">
-arrow_back_2
-</span> Back
+                <span className="material-symbols-outlined">arrow_back_2</span> Back
             </button>
             <div className="user_info">
                 <span className="material-symbols-outlined user_icon">account_circle</span>

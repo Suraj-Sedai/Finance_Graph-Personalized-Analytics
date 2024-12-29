@@ -4,12 +4,12 @@ from django.core.exceptions import ValidationError
 
 class Transaction(models.Model):
     CATEGORY_CHOICES = [
-        ('food', 'Food'),
-        ('entertainment', 'Entertainment'),
-        ('utilities', 'Utilities'),
-        ('others', 'Others'),
+        ('Food', 'Food'),
+        ('Entertainment', 'Entertainment'),
+        ('Bills', 'Bills'),
+        ('Travel', 'Travel'),
+        ('Shopping', 'Shopping'),
     ]
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 

@@ -70,27 +70,77 @@ h2 {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-.financial-analytics-container h3 {
-  font-size: 1.3rem;
+.financial-analytics-container h1 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.financial-analytics-container h2 {
+  font-size: 1.5rem;
   color: #34495e;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-weight: 500;
 }
 
 .financial-analytics-container ul {
   list-style: none;
   padding-left: 0;
+  margin-top: 15px;
 }
 
 .financial-analytics-container li {
-  margin-bottom: 8px;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  color: #2c3e50;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.financial-analytics-container li::before {
+  content: "\2022"; /* Unicode bullet character */
+  color: #3498db; /* Bullet color */
+  font-weight: bold;
+  display: inline-block;
+  width: 1rem;
+  margin-right: 10px;
+}
+
+.financial-analytics-container li span {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.financial-analytics-container li span .category {
+  font-weight: bold;
+  color: #2980b9;
+}
+
+.financial-analytics-container li span .amount {
+  font-weight: normal;
+  color: #e74c3c;
 }
 
 .error {
   color: red;
   font-size: 14px;
   margin-top: 10px;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .financial-analytics-container {
+    flex: 1 1 100%;
+  }
 }
 
 /* Pie Chart Section */
@@ -379,4 +429,173 @@ h2 {
 
 .form_link:hover {
   color: #2980b9;
+}
+/* Transaction List Page Styles */
+.transaction-list-container {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 900px; /* Increased width for better appearance */
+  margin: 40px auto;
+  text-align: center;
+}
+
+.transaction-list-container h2 {
+  font-size: 26px; /* Slightly larger font for the heading */
+  color: #34495e;
+  margin-bottom: 25px;
+  font-weight: 500;
+}
+
+.transaction-list-container .no-transactions {
+  font-size: 18px;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.transaction-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0; /* Remove extra spacing */
+}
+
+.transaction-item {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding: 15px; /* Adjusted padding for better balance */
+  background-color: #f7f9fb;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-item strong {
+  color: #34495e;
+  font-weight: 600;
+}
+
+.loading {
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.error {
+  font-size: 16px;
+  color: red;
+  font-weight: 500;
+}
+
+.back-button {
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  padding: 12px 25px; /* Adjusted button size */
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #2980b9;
+}
+/* Add Transaction Form Page Styles */
+.transaction_container {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 900px; /* Wider container for better appearance */
+  margin: 40px auto;
+}
+
+.back_button {
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.back_button:hover {
+  background-color: #2980b9;
+}
+
+.user_info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.user_icon {
+  font-size: 30px;
+  color: #7f8c8d;
+}
+
+.transaction_form_wrapper {
+  text-align: center;
+  padding: 25px;
+  background-color: #f7f9fb;
+  border-radius: 15px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form_heading {
+  font-size: 26px;
+  font-weight: 500;
+  color: #34495e;
+  margin-bottom: 25px;
+}
+
+.form_input,
+.form_select {
+  width: 100%;
+  max-width: 800px; /* Wider input fields */
+  margin: 10px auto;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  display: block;
+  box-sizing: border-box;
+}
+
+.form_input:focus,
+.form_select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.form_button {
+  background-color: #2ecc71;
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.form_button:hover {
+  background-color: #27ae60;
+}
+
+.error_message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
 }

@@ -63,20 +63,7 @@ const HomePage = () => {
             </section>
 
             <section className='sec_page'>
-                <div className='trans'>
-                    <h2>Recent Transactions</h2>
-                    {recentTransactions.length > 0 ? (
-                        <ul>
-                            {recentTransactions.map((transaction) => (
-                                <li key={transaction.id}>
-                                    {transaction.description} - ${transaction.amount} - {transaction.date}
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p>No recent transactions found.</p>
-                    )}
-                </div>
+
 
                 {/* Two separate containers for Financial Analytics and Pie Chart */}
                 <div className="analytics-and-chart">
