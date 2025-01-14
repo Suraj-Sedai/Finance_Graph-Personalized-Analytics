@@ -83,7 +83,11 @@ npm install
 
 npm start
 
+---------------------
+
 Configuration
+
+---------------------
 
 •	Update the API_BASE_URL in the frontend code (frontend/src/api.js) to point to the backend server if not running locally.
 
