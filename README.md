@@ -1,4 +1,5 @@
 Finance Management Web Application
+
 This is a comprehensive web application for managing personal finances, tracking transactions, calculating spending, and generating financial analytics, including visual representations like pie charts. The application is built using Django (backend) and React (frontend), with integrated features for user authentication, registration, transaction management, and analytics visualization.
 
 Features
