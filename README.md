@@ -36,47 +36,37 @@ npm or yarn
 Backend Setup (Django)
 Clone the repository:
 
-bash
-Copy code
+
 git clone <repository-url>
 cd <repository-name>/backend
 Install the required Python dependencies:
 
-bash
-Copy code
+
 pip install -r requirements.txt
 Apply the database migrations:
 
-bash
-Copy code
+
 python manage.py migrate
 Create a superuser for the Django admin (optional):
 
-bash
-Copy code
+
 python manage.py createsuperuser
 Start the Django development server:
 
-bash
-Copy code
+
 python manage.py runserver
 The backend will be running at http://127.0.0.1:8000.
 
 Frontend Setup (React)
 Navigate to the frontend directory:
 
-bash
-Copy code
+
 cd <repository-name>/frontend
 Install the required npm dependencies:
 
-bash
-Copy code
 npm install
 Start the React development server:
 
-bash
-Copy code
 npm start
 The frontend will be running at http://localhost:3000.
 
