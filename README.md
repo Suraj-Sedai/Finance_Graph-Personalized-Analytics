@@ -1,135 +1,68 @@
-Finance Management Application
-This project is a finance management application that allows users to track their financial transactions, view spending analytics, and manage their personal finance data. It includes functionality for tracking transactions, calculating total and average spending, visualizing spending by category with pie charts, and managing user authentication via JWT tokens.
-
+Finance Management Web Application
+This is a comprehensive web application for managing personal finances, tracking transactions, calculating spending, and generating financial analytics, including visual representations like pie charts. The application is built using Django (backend) and React (frontend), with integrated features for user authentication, registration, transaction management, and analytics visualization.
 Features
-User Registration & Authentication: Users can register and log in with a username and password.
-Transaction Management: Users can add, view, update, and delete financial transactions.
-Financial Analytics: View total and average spending, as well as a breakdown of spending by category.
-Visualization: Pie chart generation to visualize spending by category.
-Responsive UI: The frontend is designed to be responsive and user-friendly, offering smooth interaction across various devices.
-Tech Stack
-Backend: Django (REST Framework), NumPy
-Frontend: React, Axios
-Visualization: Matplotlib (for pie chart generation)
-Authentication: JWT (JSON Web Token)
-Database: SQLite (or PostgreSQL/MySQL in production)
-Project Structure
-1. Backend (Django)
-Transaction Model: Stores details of each financial transaction (amount, description, category, etc.).
-Views:
-FinancialDataView: Returns total spending, average spending, and spending breakdown by category.
-Category Spending Pie Chart: Generates a pie chart for spending visualization.
-RegisterView: Allows users to register an account.
-TransactionView: Handles creating and viewing transactions.
-TransactionViewSet: Provides CRUD operations for transactions.
-JWT Authentication: Secure API endpoints using JWT tokens.
-2. Frontend (React + Axios)
-Axios Instance: Handles HTTP requests with automatic JWT token management.
-Login & Registration: Users can log in and register using their credentials. A JWT token is stored in localStorage for session management.
-Transaction Pages: Pages for viewing, adding, and managing transactions.
-Responsive UI: The app adapts to different screen sizes (mobile and desktop).
+•	User Authentication: Users can register, log in, and manage their accounts.
+•	Transaction Management: Users can add, view, and delete financial transactions.
+•	Financial Analytics: Real-time data analytics showing total spending, average spending, and spending by category.
+•	Pie Chart Visualization: A dynamic pie chart representing the user’s spending breakdown by category.
+•	Responsive Design: The application is fully responsive for both mobile and desktop devices.
+•	JWT Authentication: Secure authentication using JSON Web Tokens (JWT) for API requests.
+Technologies Used
+•	Backend: Django, Django REST Framework
+•	Frontend: React, Axios
+•	Data Analytics: NumPy
+•	Data Visualization: Matplotlib (for pie charts)
+•	Database: SQLite (for development), can be switched to other databases like PostgreSQL for production
 Setup Instructions
 Prerequisites
-Python 3.x
-Node.js
-npm or yarn
-Backend Setup (Django)
-Clone the repository:
-
-
-git clone <repository-url>
-cd <repository-name>/backend
-Install the required Python dependencies:
-
-
+Ensure you have the following installed on your system:
+•	Python (3.x)
+•	Node.js (for React frontend)
+•	npm (for managing frontend packages)
+•	SQLite (or another preferred database)
+Backend Setup
+1.	Clone the repository:
+git clone <https://github.com/Suraj-Sedai/Finance_Graph-Personalized-Analytics>
+2.	Navigate to the backend directory:
+cd backend/
+3.	Create a virtual environment (optional but recommended):
+python -m venv venv
+source venv/bin/activate  # On Windows, use venv\Scripts\activate
+4.	Install the required Python packages:
 pip install -r requirements.txt
-Apply the database migrations:
-
-
+5.	Apply migrations to set up the database:
 python manage.py migrate
-Create a superuser for the Django admin (optional):
-
-
+6.	Create a superuser for accessing the admin panel (optional):
 python manage.py createsuperuser
-Start the Django development server:
-
-
+7.	Start the backend server:
 python manage.py runserver
-The backend will be running at http://127.0.0.1:8000.
-
-Frontend Setup (React)
-Navigate to the frontend directory:
-
-
-cd <repository-name>/frontend
-Install the required npm dependencies:
-
+Frontend Setup
+1.	Navigate to the frontend directory:
+cd frontend/
+2.	Install the required frontend packages:
 npm install
-Start the React development server:
-
+3.	Start the frontend development server:
 npm start
-The frontend will be running at http://localhost:3000.
-
+Configuration
+•	Update the API_BASE_URL in the frontend code (frontend/src/api.js) to point to the backend server if not running locally.
+•	Set up JWT token handling and store it in localStorage for user authentication.
 API Endpoints
-1. Authentication
-POST /api/token/: Get JWT token (login)
-
-Request body:
-json
-Copy code
-{
-  "username": "user",
-  "password": "password"
-}
-POST /api/register/: Register a new user
-
-Request body:
-json
-Copy code
-{
-  "username": "newuser",
-  "password": "newpassword"
-}
-2. Transactions
-GET /api/transactions/: List all transactions for the authenticated user.
-
-POST /api/transactions/: Create a new transaction.
-
-Request body:
-json
-Copy code
-{
-  "description": "Lunch",
-  "amount": 15.50,
-  "category": "Food"
-}
-GET /api/transactions/{id}/: View a specific transaction.
-
-PUT /api/transactions/{id}/: Update an existing transaction.
-
-DELETE /api/transactions/{id}/: Delete a transaction.
-
-3. Financial Analytics
-GET /api/financial-data/: Get total and average spending, as well as spending by category.
-4. Pie Chart Generation
-GET /api/category-spending-pie-chart/: Generates a pie chart for spending by category.
-Frontend Usage
-Login: The login page allows users to enter their credentials (username, password). Upon successful login, a JWT token is stored in localStorage and sent with each API request.
-
-Register: New users can register using the RegisterView endpoint by providing a username and password.
-
-Transaction Management:
-
-Users can add new transactions by filling out a form with the transaction description, amount, and category.
-Existing transactions can be viewed, updated, or deleted from the transaction list page.
-Financial Analytics: View your total and average spending, as well as a pie chart breakdown of spending by category.
-
+•	POST /api/register/: User registration endpoint.
+•	POST /api/token/: Obtain a JWT token for authentication.
+•	GET /api/transactions/: Retrieve all transactions for the authenticated user.
+•	POST /api/transactions/: Add a new transaction for the authenticated user.
+•	GET /api/financial-data/: Fetch total spending, average spending, and spending by category for the authenticated user.
+•	GET /api/category-spending-pie-chart/: Generate a pie chart showing spending by category.
+Frontend Details
+•	Login & Signup Forms: User-friendly forms to handle login and registration.
+•	Dashboard: Displays financial data (total, average, and category-wise spending) along with a pie chart visualization.
+•	Transaction List: Allows users to view, add, and manage their transactions.
+•	Responsive Design: The UI adapts to different screen sizes for a smooth experience across devices.
 Error Handling
-401 Unauthorized: If the JWT token is expired or invalid, users are logged out automatically, and they are redirected to the login page.
-Form Errors: Validation errors are displayed on the frontend with helpful messages.
-Conclusion
-This project serves as a full-stack personal finance management application, offering secure user authentication, transaction management, financial analytics, and visualizations to help users better understand their spending habits.
-
-Feel free to contribute to the project or suggest improvements!
-
-
+•	All API responses include relevant status codes to indicate success or failure.
+•	JWT token expiration (401 Unauthorized) results in automatic logout and redirection to the login page.
+Future Improvements
+•	Multi-user support: Adding support for multiple users in a single application.
+•	Advanced Analytics: Introduce more detailed financial reports (e.g., monthly/yearly analysis).
+•	Cloud Database: Use a cloud database like PostgreSQL or MySQL for production environments.
+•	User Profile: Enhance the user profile section with additional settings and preferences.
