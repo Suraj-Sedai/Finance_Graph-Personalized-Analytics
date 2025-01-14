@@ -1,25 +1,46 @@
 Finance Management Web Application
 This is a comprehensive web application for managing personal finances, tracking transactions, calculating spending, and generating financial analytics, including visual representations like pie charts. The application is built using Django (backend) and React (frontend), with integrated features for user authentication, registration, transaction management, and analytics visualization.
+
 Features
+
 •	User Authentication: Users can register, log in, and manage their accounts.
+
 •	Transaction Management: Users can add, view, and delete financial transactions.
+
 •	Financial Analytics: Real-time data analytics showing total spending, average spending, and spending by category.
+
 •	Pie Chart Visualization: A dynamic pie chart representing the user’s spending breakdown by category.
+
 •	Responsive Design: The application is fully responsive for both mobile and desktop devices.
+
 •	JWT Authentication: Secure authentication using JSON Web Tokens (JWT) for API requests.
+
 Technologies Used
+
 •	Backend: Django, Django REST Framework
+
 •	Frontend: React, Axios
+
 •	Data Analytics: NumPy
+
 •	Data Visualization: Matplotlib (for pie charts)
+
 •	Database: SQLite (for development), can be switched to other databases like PostgreSQL for production
+
 Setup Instructions
+
 Prerequisites
+
 Ensure you have the following installed on your system:
+
 •	Python (3.x)
+
 •	Node.js (for React frontend)
+
 •	npm (for managing frontend packages)
+
 •	SQLite (or another preferred database)
+
 Backend Setup
 1.	Clone the repository:
 git clone <https://github.com/Suraj-Sedai/Finance_Graph-Personalized-Analytics>
