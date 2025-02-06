@@ -123,6 +123,13 @@ class TransactionView(APIView):
             return Response({"message": "Transaction added successfully!", "transaction": serializer.data}, status=201)
         return Response(serializer.errors, status=400)
 
+    def delete(self, request, transaction_id):
+        try:
+            transaction = Transaction.objects.get(id=transaction_id, user=request.user)
+            transaction.delete()
+            return Response({"message": "Transaction deleted successfully!"}, status=200)
+        except Transaction.DoesNotExist:
+            return Response({"error": "Transaction not found."}, status=404)
 
 # Transaction viewset (optional, can be used for more complex CRUD functionality)
 class TransactionViewSet(viewsets.ModelViewSet):

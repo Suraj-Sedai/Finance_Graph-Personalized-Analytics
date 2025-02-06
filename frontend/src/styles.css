@@ -599,3 +599,16 @@ h2 {
   margin-bottom: 15px;
   text-align: center;
 }
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-button:hover {
+  background-color: darkred;
+}

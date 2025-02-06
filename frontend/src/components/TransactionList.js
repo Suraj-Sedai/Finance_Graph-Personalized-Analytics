@@ -4,56 +4,70 @@ import { useNavigate } from 'react-router-dom';
 
 const TransactionList = () => {
     const [transactions, setTransactions] = useState([]);
-    const [loading, setLoading] = useState(true); // Loading state
-    const [error, setError] = useState(null); // Error state
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const token = localStorage.getItem('token');
-    const navigate = useNavigate(); // For navigation
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!token) {
-            navigate('/login'); // Redirect to login if no token
+            navigate('/login');
             return;
         }
-    
+
+        fetchTransactions();
+    }, [token, navigate]);
+
+    const fetchTransactions = () => {
         axios
             .get('http://127.0.0.1:8000/api/transactions/', {
                 headers: { Authorization: `Bearer ${token}` },
             })
             .then((response) => {
-                console.log('API response:', response.data); // Debug log
                 setTransactions(response.data);
-                setLoading(false); // Set loading to false once data is fetched
+                setLoading(false);
             })
             .catch((error) => {
-                console.error('API error:', error); // Debug log
                 setError('Failed to load transactions. Please try again later.');
                 setLoading(false);
             });
-    }, [token, navigate]);
+    };
+
+    const deleteTransaction = (id) => {
+        axios
+            .delete(`http://127.0.0.1:8000/api/transactions/${id}/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then(() => {
+                setTransactions(transactions.filter((transaction) => transaction.id !== id));
+            })
+            .catch((error) => {
+                console.error('Error deleting transaction:', error);
+                alert('Failed to delete transaction. Please try again.');
+            });
+    };
 
     if (loading) {
         return <div className="loading">Loading transactions...</div>;
     }
-    
+
     if (error) {
         return (
             <div className="error">
                 <p>{error}</p>
-                <button onClick={() => window.location.reload()}>Retry</button> {/* Retry button */}
+                <button onClick={() => window.location.reload()}>Retry</button>
             </div>
         );
     }
 
     return (
         <div className="transaction-list-container">
-                        <button className="back_button" onClick={() => navigate('/home')}>
-            <span class="material-symbols-outlined">
-arrow_back_2
-</span> Back
+            <button className="back_button" onClick={() => navigate('/home')}>
+                <span className="material-symbols-outlined">arrow_back_2</span> Back
             </button>
             <h2>Transaction List</h2>
             {transactions.length === 0 ? (
-                <p className="no-transactions">No transactions available.</p> // Handle empty transactions
+                <p className="no-transactions">No transactions available.</p>
             ) : (
                 <ul className="transaction-list">
                     {transactions.map((transaction) => (
@@ -61,6 +75,12 @@ arrow_back_2
                             <strong>{transaction.description}</strong>
                             <br />
                             ${transaction.amount} - {transaction.category}
+                            <button
+                                className="delete-button"
+                                onClick={() => deleteTransaction(transaction.id)}
+                            >
+                                🗑 Delete
+                            </button>
                         </li>
                     ))}
                 </ul>
