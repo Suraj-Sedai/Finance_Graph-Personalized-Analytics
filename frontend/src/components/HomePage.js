@@ -63,6 +63,13 @@ const HomePage = () => {
                         <button className='nav_btn'>View All Transactions</button>
                     </Link>
                 </div>
+                {/* Extract Data Buttons */}
+                <div className="export-buttons">
+                    <h2>Download Your Financial Data</h2>
+                    <button className="export-btn" onClick={() => downloadFile('csv')}>Download CSV</button>
+                    <button className="export-btn" onClick={() => downloadFile('json')}>Download JSON</button>
+                    <button className="export-btn" onClick={() => downloadFile('pdf')}>Download PDF</button>
+                </div>
             </section>
 
             <section className='sec_page'>
@@ -72,13 +79,7 @@ const HomePage = () => {
                     </div>
                 </div>
 
-                {/* Extract Data Buttons */}
-                <div className="export-buttons">
-                    <h2>Download Your Financial Data</h2>
-                    <button className="export-btn" onClick={() => downloadFile('csv')}>Download CSV</button>
-                    <button className="export-btn" onClick={() => downloadFile('json')}>Download JSON</button>
-                    <button className="export-btn" onClick={() => downloadFile('pdf')}>Download PDF</button>
-                </div>
+
             </section>
         </div>
     );

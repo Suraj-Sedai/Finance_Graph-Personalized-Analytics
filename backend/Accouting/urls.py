@@ -18,9 +18,6 @@ urlpatterns = [
     
     # Pie chart for category spending
     path('api/pie-chart/', category_spending_pie_chart, name='category_spending_pie_chart'),  # Pie chart endpoint
-
+    
     path('api/export/<str:format_type>/', export_financial_data, name='export_financial_data'),
-
-
-
 ]
