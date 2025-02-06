@@ -612,3 +612,25 @@ h2 {
 .delete-button:hover {
   background-color: darkred;
 }
+.export-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.export-buttons h2 {
+  margin-bottom: 10px;
+}
+
+.export-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.export-btn:hover {
+  background-color: #45a049;
+}

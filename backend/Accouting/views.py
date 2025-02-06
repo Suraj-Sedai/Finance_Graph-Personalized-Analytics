@@ -23,6 +23,96 @@ logger = logging.getLogger(__name__)
 def home(request):
     return HttpResponse("Welcome to the Finance Management API!")
 
+import csv
+import json
+import pandas as pd
+from django.http import HttpResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import Transaction
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def export_financial_data(request, format_type):
+    user = request.user
+    transactions = Transaction.objects.filter(user=user)
+
+    # Prepare financial summary
+    total_spending = transactions.aggregate(Sum('amount'))['amount__sum'] or 0
+    average_spending = transactions.aggregate(avg_spending=Sum('amount') / transactions.count())['avg_spending'] or 0
+    categories = transactions.values('category').annotate(total_amount=Sum('amount'))
+
+    # Prepare transaction data
+    data = {
+        "Username": user.username,
+        "Total Spending": float(total_spending),
+        "Average Spending": float(average_spending),
+        "Spending by Category": [{cat["category"]: float(cat["total_amount"])} for cat in categories],
+        "Transactions": [
+            {
+                "Description": t.description,
+                "Category": t.category,
+                "Date": t.date.strftime("%Y-%m-%d"),
+                "Price": float(t.amount)
+            }
+            for t in transactions
+        ],
+    }
+
+    # Handle CSV export
+    if format_type == "csv":
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = f'attachment; filename=financial_data_{user.username}.csv'
+        writer = csv.writer(response)
+        
+        # Write header
+        writer.writerow(["Username", user.username])
+        writer.writerow(["Total Spending", total_spending])
+        writer.writerow(["Average Spending", average_spending])
+        writer.writerow([])
+        writer.writerow(["Category", "Total Amount"])
+        for cat in categories:
+            writer.writerow([cat["category"], float(cat["total_amount"])])
+        writer.writerow([])
+        writer.writerow(["Description", "Category", "Date", "Price"])
+        for t in transactions:
+            writer.writerow([t.description, t.category, t.date.strftime("%Y-%m-%d"), float(t.amount)])
+        return response
+
+    # Handle JSON export
+    elif format_type == "json":
+        response = HttpResponse(json.dumps(data, indent=4), content_type='application/json')
+        response['Content-Disposition'] = f'attachment; filename=financial_data_{user.username}.json'
+        return response
+
+    # Handle PDF export
+    elif format_type == "pdf":
+        from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename=financial_data_{user.username}.pdf'
+        p = canvas.Canvas(response, pagesize=letter)
+        p.drawString(100, 750, f"Financial Report for {user.username}")
+        p.drawString(100, 730, f"Total Spending: ${total_spending}")
+        p.drawString(100, 710, f"Average Spending: ${average_spending}")
+        p.drawString(100, 690, "Spending by Category:")
+        y = 670
+        for cat in categories:
+            p.drawString(120, y, f"- {cat['category']}: ${float(cat['total_amount'])}")
+            y -= 20
+        p.drawString(100, y - 20, "Transactions:")
+        y -= 40
+        for t in transactions:
+            p.drawString(120, y, f"{t.date.strftime('%Y-%m-%d')} - {t.category} - {t.description} - ${float(t.amount)}")
+            y -= 20
+        p.save()
+        return response
+
+    else:
+        return HttpResponse({"error": "Invalid format"}, status=400)
+
+
 # Endpoint to get financial data (total spending, average spending)
 class FinancialDataView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated

@@ -2,54 +2,57 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import FinancialAnalytics from './FinancialAnalytics'; // Import FinancialAnalytics component
+import FinancialAnalytics from './FinancialAnalytics';
 
 const HomePage = () => {
     const navigate = useNavigate();
-    const [recentTransactions, setRecentTransactions] = useState([]);
-    const [isLogoutVisible, setLogoutVisible] = useState(false);  // State to control logout visibility
+    const [isLogoutVisible, setLogoutVisible] = useState(false);
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('username');
-        navigate('/');  // Redirect to login page
+        navigate('/');
     };
 
     const toggleLogoutVisibility = () => {
-        setLogoutVisible(!isLogoutVisible);  // Toggle logout button visibility
+        setLogoutVisible(!isLogoutVisible);
     };
 
-    useEffect(() => {
-        const fetchRecentTransactions = async () => {
-            try {
-                if (token) {
-                    const response = await axios.get('http://127.0.0.1:8000/api/transactions/', {
-                        headers: { Authorization: `Bearer ${token}` }
-                    });
-                    setRecentTransactions(response.data.slice(0, 5));  // Fetch only the first 5 transactions
-                }
-            } catch (error) {
-                console.error('Error fetching transactions:', error);
-            }
-        };
+    const downloadFile = (format) => {
+        const url = `http://127.0.0.1:8000/api/export/${format}/`;
 
-        fetchRecentTransactions();
-    }, [token]);
+        axios({
+            url: url,
+            method: 'GET',
+            headers: { Authorization: `Bearer ${token}` },
+            responseType: 'blob'
+        })
+        .then((response) => {
+            const file = new Blob([response.data], { type: response.headers['content-type'] });
+            const fileURL = URL.createObjectURL(file);
+            const a = document.createElement('a');
+            a.href = fileURL;
+            a.download = `financial_data.${format}`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        })
+        .catch((error) => {
+            console.error(`Error downloading ${format} file:`, error);
+            alert(`Failed to download ${format} file.`);
+        });
+    };
 
     return (
         <div>
             <section className='home_page'>
                 <h1>Welcome to the Finance Management System</h1>
                 <div className={`user ${isLogoutVisible ? 'active' : ''}`} onClick={toggleLogoutVisibility}>
-                    <span className="material-symbols-outlined">
-                        account_circle
-                    </span>
+                    <span className="material-symbols-outlined">account_circle</span>
                     <p>{username}</p>
-                    {isLogoutVisible && (
-                        <button className='logout' onClick={handleLogout}>Logout</button>
-                    )}
+                    {isLogoutVisible && <button className='logout' onClick={handleLogout}>Logout</button>}
                 </div>
 
                 <div className='nav'>
@@ -63,15 +66,18 @@ const HomePage = () => {
             </section>
 
             <section className='sec_page'>
-
-
-                {/* Two separate containers for Financial Analytics and Pie Chart */}
                 <div className="analytics-and-chart">
                     <div className="financial-analytics-container">
                         <FinancialAnalytics />
                     </div>
+                </div>
 
-
+                {/* Extract Data Buttons */}
+                <div className="export-buttons">
+                    <h2>Download Your Financial Data</h2>
+                    <button className="export-btn" onClick={() => downloadFile('csv')}>Download CSV</button>
+                    <button className="export-btn" onClick={() => downloadFile('json')}>Download JSON</button>
+                    <button className="export-btn" onClick={() => downloadFile('pdf')}>Download PDF</button>
                 </div>
             </section>
         </div>

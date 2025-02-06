@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import RegisterView, TransactionView, FinancialDataView, category_spending_pie_chart
+from .views import RegisterView, TransactionView, FinancialDataView, category_spending_pie_chart, export_financial_data
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -18,4 +18,9 @@ urlpatterns = [
     
     # Pie chart for category spending
     path('api/pie-chart/', category_spending_pie_chart, name='category_spending_pie_chart'),  # Pie chart endpoint
+
+    path('api/export/<str:format_type>/', export_financial_data, name='export_financial_data'),
+
+
+
 ]
