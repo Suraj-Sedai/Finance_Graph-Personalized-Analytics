@@ -1,88 +1,226 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import FinancialAnalytics from './FinancialAnalytics';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Download } from "lucide-react";
+import { Chart } from "chart.js/auto";
 
-const HomePage = () => {
-    const navigate = useNavigate();
-    const [isLogoutVisible, setLogoutVisible] = useState(false);
-    const token = localStorage.getItem('token');
-    const username = localStorage.getItem('username');
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-        navigate('/');
-    };
+  // State to hold the fetched financial data
+  const [financialData, setFinancialData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const toggleLogoutVisibility = () => {
-        setLogoutVisible(!isLogoutVisible);
-    };
+  // Fetch the logged-in user's financial data from the backend
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/financial-data/", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setFinancialData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching financial data:", error);
+        setLoading(false);
+      });
+  }, [token]);
 
-    const downloadFile = (format) => {
-        const url = `http://127.0.0.1:8000/api/export/${format}/`;
+  // Function to download files (PDF, CSV, JSON, etc.) using the export endpoint
+  const downloadFile = (format) => {
+    const url = `http://127.0.0.1:8000/api/export/${format.toLowerCase()}/`;
 
-        axios({
-            url: url,
-            method: 'GET',
-            headers: { Authorization: `Bearer ${token}` },
-            responseType: 'blob'
-        })
-        .then((response) => {
-            const file = new Blob([response.data], { type: response.headers['content-type'] });
-            const fileURL = URL.createObjectURL(file);
-            const a = document.createElement('a');
-            a.href = fileURL;
-            a.download = `financial_data.${format}`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        })
-        .catch((error) => {
-            console.error(`Error downloading ${format} file:`, error);
-            alert(`Failed to download ${format} file.`);
+    axios({
+      url: url,
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+      responseType: "blob",
+    })
+      .then((response) => {
+        const file = new Blob([response.data], {
+          type: response.headers["content-type"],
         });
+        const fileURL = URL.createObjectURL(file);
+        const a = document.createElement("a");
+        a.href = fileURL;
+        a.download = `financial_data.${format.toLowerCase()}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+      .catch((error) => {
+        console.error(`Error downloading ${format} file:`, error);
+        alert(`Failed to download ${format} file.`);
+      });
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!financialData) {
+    return <div>Error loading financial data.</div>;
+  }
+
+  // Prepare spending data for the CategoryList and PieChart components.
+  // The API returns categories with a property "total_amount" which we map to "amount".
+  const spendingData = financialData.categories.map((cat) => ({
+    category: cat.category,
+    amount: cat.total_amount,
+  }));
+
+  return (
+    <div className="dashboard-wrapper">
+      <main className="main-content">
+        <h1 className="dashboard-title">Dashboard</h1>
+
+        {/* Metrics Section */}
+        <section className="metrics">
+          <Card
+            title="Total Spending"
+            value={`$${financialData.total_spending}`}
+          />
+          <Card
+            title="Average Spending"
+            value={`$${financialData.average_spending}`}
+          />
+        </section>
+
+        {/* Spending Categories & Chart */}
+        <section className="spending-section">
+          <CategoryList data={spendingData} />
+          <ChartCard data={spendingData} />
+        </section>
+
+        {/* Download Section */}
+        <section className="download-section">
+          <h2>Download Your Financial Data</h2>
+          <div className="download-buttons">
+            <DownloadButton
+              format="PDF"
+              onClick={() => downloadFile("PDF")}
+            />
+            <DownloadButton
+              format="CSV"
+              onClick={() => downloadFile("CSV")}
+            />
+            <DownloadButton
+              format="JSON"
+              onClick={() => downloadFile("JSON")}
+            />
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+// Card Component for displaying metrics
+function Card({ title, value }) {
+  return (
+    <div className="card metric-card">
+      <h3>{title}</h3>
+      <p className="value">{value}</p>
+    </div>
+  );
+}
+
+// Component to list spending by category
+function CategoryList({ data }) {
+  return (
+    <div className="card category-card">
+      <h3>Spending by Category</h3>
+      <div className="category-list">
+        {data.map((item) => (
+          <div key={item.category} className="spending-item">
+            <span className="category-name">{item.category}</span>
+            <span className="category-amount">
+              ${item.amount.toFixed(2)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Chart Card Component wrapping the Pie Chart
+function ChartCard({ data }) {
+  return (
+    <div className="card chart-card">
+      <PieChart data={data} />
+    </div>
+  );
+}
+
+// Pie Chart Component using Chart.js
+function PieChart({ data }) {
+  const chartRef = useRef(null);
+  const chartInstance = useRef(null);
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    // Destroy any previous chart instance to avoid duplicates
+    if (chartInstance.current) {
+      chartInstance.current.destroy();
+    }
+
+    const ctx = chartRef.current.getContext("2d");
+    if (!ctx) return;
+
+    chartInstance.current = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: data.map((item) => item.category),
+        datasets: [
+          {
+            data: data.map((item) => item.amount),
+            backgroundColor: [
+              "#FF6384",
+              "#36A2EB",
+              "#FFCE56",
+              "#4BC0C0",
+              "#9966FF",
+              "#FF9F40",
+            ],
+            borderColor: "#222",
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "right",
+            labels: {
+              color: "#fff",
+            },
+          },
+        },
+      },
+    });
+
+    // Cleanup the chart instance on unmount
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
     };
+  }, [data]);
 
-    return (
-        <div>
-            <section className='home_page'>
-                <h1>Welcome to the Finance Management System</h1>
-                <div className={`user ${isLogoutVisible ? 'active' : ''}`} onClick={toggleLogoutVisibility}>
-                    <span className="material-symbols-outlined">account_circle</span>
-                    <p>{username}</p>
-                    {isLogoutVisible && <button className='logout' onClick={handleLogout}>Logout</button>}
-                </div>
+  return <canvas ref={chartRef} />;
+}
 
-                <div className='nav'>
-                    <Link to="/add-transaction">
-                        <button className='nav_btn'>Add Transaction</button>
-                    </Link>
-                    <Link to="/transactions">
-                        <button className='nav_btn'>View All Transactions</button>
-                    </Link>
-                </div>
-                {/* Extract Data Buttons */}
-                <div className="export-buttons">
-                    <h2>Download Your Financial Data</h2>
-                    <button className="export-btn" onClick={() => downloadFile('csv')}>Download CSV</button>
-                    <button className="export-btn" onClick={() => downloadFile('json')}>Download JSON</button>
-                    <button className="export-btn" onClick={() => downloadFile('pdf')}>Download PDF</button>
-                </div>
-            </section>
-
-            <section className='sec_page'>
-                <div className="analytics-and-chart">
-                    <div className="financial-analytics-container">
-                        <FinancialAnalytics />
-                    </div>
-                </div>
-
-
-            </section>
-        </div>
-    );
-};
-
-export default HomePage;
+// Download Button Component
+function DownloadButton({ format, onClick }) {
+  return (
+    <button className="download-button" onClick={onClick}>
+      <Download className="icon" />
+      <span>{format}</span>
+    </button>
+  );
+}
