@@ -4,32 +4,43 @@ from django.core.exceptions import ValidationError
 # serializers.py
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Profile  # Ensure you import your Profile model
+from .models import Profile
 
 class UserSettingsSerializer(serializers.ModelSerializer):
-    # Access profile picture through a nested source
-    profile_picture = serializers.ImageField(source='profile.profile_picture', required=False, allow_null=True)
+    # Use a SerializerMethodField to return the picture URL (or default if not set)
+    profile_picture = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = User
         fields = ('username', 'password', 'profile_picture')
 
+    def get_profile_picture(self, obj):
+        try:
+            pic = obj.profile.profile_picture
+            if pic and hasattr(pic, "url"):
+                return pic.url
+            else:
+                # Return a default image URL – make sure this file exists in your static files
+                return "/static/images/default_profile.jpg"
+        except Exception:
+            return "/static/images/default_profile.jpg"
+
     def update(self, instance, validated_data):
         # Update username
         instance.username = validated_data.get('username', instance.username)
-        
+
         # Update password if provided
         password = validated_data.get('password', None)
         if password:
             instance.set_password(password)
         instance.save()
-        
-        # Use get_or_create to ensure a Profile exists
+
+        # Handle profile picture update
         profile_data = validated_data.get('profile', {})
-        profile, created = Profile.objects.get_or_create(user=instance)
-        
         profile_picture = profile_data.get('profile_picture', None)
+        # Use get_or_create to ensure a Profile exists
+        profile, created = Profile.objects.get_or_create(user=instance)
         if profile_picture:
             profile.profile_picture = profile_picture
             profile.save()

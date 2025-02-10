@@ -11,6 +11,9 @@ const SettingsPage = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
 
+  // Default profile image URL (update this path as needed)
+  const defaultProfileUrl = '/static/images/default_profile.jpg';
+
   // Fetch current settings on mount
   useEffect(() => {
     if (!token) {
@@ -23,9 +26,11 @@ const SettingsPage = () => {
       })
       .then((response) => {
         setUsername(response.data.username);
-        // If a profile picture URL is returned, use it for preview
+        // Use the profile_picture returned by the API or a default image
         if (response.data.profile_picture) {
           setPreviewUrl(response.data.profile_picture);
+        } else {
+          setPreviewUrl(defaultProfileUrl);
         }
       })
       .catch((error) => {
@@ -38,6 +43,7 @@ const SettingsPage = () => {
     const file = e.target.files[0];
     setProfilePicture(file);
     if (file) {
+      // Create a temporary URL for previewing the selected image
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
@@ -66,8 +72,13 @@ const SettingsPage = () => {
         }
       );
       setMessage('Settings updated successfully!');
-      // Optionally update localStorage if the username changed
+      // Optionally update localStorage if the username or profile picture changed
       localStorage.setItem('username', response.data.username);
+      // Save the updated profile picture URL or use the default if not provided
+      localStorage.setItem(
+        'profilePicture',
+        response.data.profile_picture || defaultProfileUrl
+      );
     } catch (error) {
       console.error('Error updating settings:', error);
       setMessage('Failed to update settings. Please try again.');
@@ -110,11 +121,9 @@ const SettingsPage = () => {
               onChange={handleFileChange}
               accept="image/*"
             />
-            {previewUrl && (
-              <div className="profile_preview">
-                <img src={previewUrl} alt="Profile Preview" />
-              </div>
-            )}
+            <div className="profile_preview">
+              <img src={previewUrl} alt="Profile Preview" />
+            </div>
           </div>
           <button type="submit" className="form_button">
             Update Settings

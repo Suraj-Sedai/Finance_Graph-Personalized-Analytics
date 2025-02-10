@@ -1,17 +1,19 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Home, Plus, Grid, Settings, LogOut } from "lucide-react";
+import { Home, Plus, Grid, Settings, LogOut, User } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  // Retrieve the username from localStorage (or receive it as a prop)
+  // Retrieve the username and profile picture URL from localStorage
   const username = localStorage.getItem("username") || "Username";
+  const profilePicture = localStorage.getItem("profilePicture"); // URL of the uploaded profile picture
 
-  // Logout function clears the token and username then redirects
+  // Logout function clears token, username, and profilePicture then redirects
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    navigate("/"); // Change this route as needed (e.g., to a login page)
+    localStorage.removeItem("profilePicture");
+    navigate("/");
   };
 
   return (
@@ -24,10 +26,13 @@ export default function Sidebar() {
       </nav>
       <div className="user">
         <div className="user-info">
-          <div className="avatar"></div>
+          {profilePicture ? (
+            <img className="avatar" src={profilePicture} alt="User Avatar" />
+          ) : (
+            <User className="avatar default-avatar" />
+          )}
           <span className="username">{username}</span>
         </div>
-        {/* Use a button here for logout so that clicking it triggers our logout function */}
         <button className="sidebar-button logout-button" onClick={handleLogout}>
           <LogOut className="icon" />
           <span className="sidebar-text"> Log Out</span>
