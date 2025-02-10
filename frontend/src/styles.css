@@ -132,6 +132,14 @@
      border-radius: 8px;
    }
    
+   .logout-button{
+    color: var(--primary-color);
+    background-color: #2a2a2a;
+    cursor: pointer;
+   }
+   .logout-button:hover{
+    color: var(--accent-color);
+   }
    .sidebar-button:hover,
    .sidebar-button.active {
      background-color: var(--hover-bg);

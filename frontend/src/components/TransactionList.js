@@ -89,7 +89,8 @@ export default function ViewAll() {
               <tbody>
                 {transactions.map((transaction) => (
                   <tr key={transaction.id}>
-                    <td>{transaction.date}</td>
+                    {/* Display only the date part by splitting at "T" */}
+                    <td>{transaction.date.split("T")[0]}</td>
                     <td>{transaction.category}</td>
                     <td>{transaction.description}</td>
                     <td>{Number(transaction.amount).toFixed(2)}</td>
