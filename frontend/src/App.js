@@ -8,6 +8,7 @@ import TransactionList from './components/TransactionList';
 import FinancialAnalytics from './components/FinancialAnalytics';
 import ProtectedRoute from './components/ProtectedRoute'; // Your authentication wrapper
 import Layout from './components/Layout'; // Import the layout
+import "./styles.css";  // Import your CSS file
 
 const App = () => {
   return (
