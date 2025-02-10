@@ -27,6 +27,25 @@ logger = logging.getLogger(__name__)
 # Define a simple homepage view
 def home(request):
     return HttpResponse("Welcome to the Finance Management API!")
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .serializers import UserSettingsSerializer
+
+class UserSettingsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSettingsSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = UserSettingsSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

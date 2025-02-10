@@ -10,8 +10,8 @@ const LoginForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Adjust the URL if necessary
-      const response = await axios.post('http://127.0.0.1:8000/token/', {
+      // Change the URL if necessary (for example, using SimpleJWT, it might be /api/token/)
+      const response = await axios.post('http://127.0.0.1:8000/api/token/', {
         username,
         password,
       });
