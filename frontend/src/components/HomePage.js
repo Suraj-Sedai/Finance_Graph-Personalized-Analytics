@@ -1,17 +1,15 @@
 import React, { useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Home, Plus, Grid, Settings, Download, LogOut } from "lucide-react";
+import { Download } from "lucide-react";
 import { Chart } from "chart.js/auto";
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const username = localStorage.getItem("username");
 
   // Function to download files (PDF, CSV, JSON, etc.)
   const downloadFile = (format) => {
-    // Ensure the format string is lowercase for the URL
     const url = `http://127.0.0.1:8000/api/export/${format.toLowerCase()}/`;
 
     axios({
@@ -21,11 +19,8 @@ export default function Dashboard() {
       responseType: "blob",
     })
       .then((response) => {
-        // Create a new Blob object using the response data
         const file = new Blob([response.data], { type: response.headers["content-type"] });
         const fileURL = URL.createObjectURL(file);
-
-        // Create a temporary link and trigger the download
         const a = document.createElement("a");
         a.href = fileURL;
         a.download = `financial_data.${format.toLowerCase()}`;
@@ -39,13 +34,6 @@ export default function Dashboard() {
       });
   };
 
-  // Logout function: clear localStorage and navigate back to login
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    navigate("/"); // Adjust the route if needed
-  };
-
   // Sample spending data (replace with dynamic data as needed)
   const spendingData = [
     { category: "Entertainment", amount: 714.25 },
@@ -57,78 +45,33 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="dashboard-container">
-      <Sidebar />
-      <div className="dashboard-wrapper">
-        <Header username={username} onLogout={handleLogout} />
+    <div className="dashboard-wrapper">
+      <main className="main-content">
+        <h1 className="dashboard-title">Dashboard</h1>
 
-        {/* Main Content */}
-        <main className="main-content">
-          <h1 className="dashboard-title">Dashboard</h1>
+        {/* Metrics Section */}
+        <section className="metrics">
+          <Card title="Total Spending" value="$4128.98" />
+          <Card title="Average Spending" value="$687.54" />
+        </section>
 
-          {/* Metrics Section */}
-          <section className="metrics">
-            <Card title="Total Spending" value="$4128.98" />
-            <Card title="Average Spending" value="$687.54" />
-          </section>
+        {/* Spending Categories & Chart */}
+        <section className="spending-section">
+          <CategoryList data={spendingData} />
+          <ChartCard data={spendingData} />
+        </section>
 
-          {/* Spending Categories & Chart */}
-          <section className="spending-section">
-            <CategoryList data={spendingData} />
-            <ChartCard data={spendingData} />
-          </section>
-
-          {/* Download Section */}
-          <section className="download-section">
-            <h2>Download Your Financial Data</h2>
-            <div className="download-buttons">
-              <DownloadButton format="PDF" onClick={() => downloadFile("PDF")} />
-              <DownloadButton format="CSV" onClick={() => downloadFile("CSV")} />
-              <DownloadButton format="JSON" onClick={() => downloadFile("JSON")} />
-            </div>
-          </section>
-        </main>
-      </div>
+        {/* Download Section */}
+        <section className="download-section">
+          <h2>Download Your Financial Data</h2>
+          <div className="download-buttons">
+            <DownloadButton format="PDF" onClick={() => downloadFile("PDF")} />
+            <DownloadButton format="CSV" onClick={() => downloadFile("CSV")} />
+            <DownloadButton format="JSON" onClick={() => downloadFile("JSON")} />
+          </div>
+        </section>
+      </main>
     </div>
-  );
-}
-
-// Sidebar Component with Navigation Links
-function Sidebar() {
-  return (
-    <aside className="sidebar">
-      <SidebarButton Icon={Home} text="Dashboard" to="/dashboard" />
-      <SidebarButton Icon={Plus} text="Add Transaction" to="/add-transaction" />
-      <SidebarButton Icon={Grid} text="Transactions" to="/transactions" />
-      <SidebarButton Icon={Settings} text="Settings" to="/settings" />
-    </aside>
-  );
-}
-
-// Sidebar Button Component (wraps a button with an optional Link)
-function SidebarButton({ Icon, text, to }) {
-  const buttonContent = (
-    <button className="sidebar-button">
-      <Icon className="icon" />
-      <span className="sidebar-text">{text}</span>
-    </button>
-  );
-  return to ? <Link to={to}>{buttonContent}</Link> : buttonContent;
-}
-
-// Header Component for displaying user info and logout button
-function Header({ username, onLogout }) {
-  return (
-    <header className="dashboard-header">
-      <div className="user-info">
-        <span className="material-symbols-outlined">account_circle</span>
-        <p>{username}</p>
-      </div>
-      <button className="logout-button" onClick={onLogout}>
-        <LogOut className="icon" />
-        Logout
-      </button>
-    </header>
   );
 }
 

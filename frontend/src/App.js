@@ -1,46 +1,67 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 import HomePage from './components/HomePage';
 import AddTransactionForm from './components/AddTransactionForm';
-import ProtectedRoute from './components/ProtectedRoute'; // Assuming you have a ProtectedRoute component
 import TransactionList from './components/TransactionList';
-import SignupForm from './components/SignupForm';
-import FinancialAnalytics from './components/FinancialAnalytics'; // Import new component
+import FinancialAnalytics from './components/FinancialAnalytics';
+import ProtectedRoute from './components/ProtectedRoute'; // Your authentication wrapper
+import Layout from './components/Layout'; // Import the layout
 
 const App = () => {
-    return (
-        <Router>
-            <Routes>
-                {/* Public routes */}
-                <Route path="/" element={<LoginForm />} />
-                <Route path="/login" element={<LoginForm />} />
-                <Route path="/signup" element={<SignupForm />} />
+  return (
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/signup" element={<SignupForm />} />
 
-                {/* Protected route for HomePage */}
-                <Route 
-                    path="/home" 
-                    element={
-                        <ProtectedRoute>
-                            <HomePage />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="/add-transaction" element={<AddTransactionForm />} />
-                <Route path="/transactions" element={<TransactionList />} />
-                
-                {/* New route for Financial Analytics */}
-                <Route 
-                    path="/financial-analytics" 
-                    element={
-                        <ProtectedRoute>
-                            <FinancialAnalytics />
-                        </ProtectedRoute>
-                    } 
-                />
-            </Routes>
-        </Router>
-    );
+        {/* Protected routes wrapped in Layout */}
+        <Route 
+          path="/home" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <HomePage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/add-transaction" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <AddTransactionForm />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/transactions" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TransactionList />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/financial-analytics" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FinancialAnalytics />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;
