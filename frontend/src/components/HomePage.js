@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Download } from "lucide-react";
@@ -8,7 +8,27 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
-  // Function to download files (PDF, CSV, JSON, etc.)
+  // State to hold the fetched financial data
+  const [financialData, setFinancialData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch the logged-in user's financial data from the backend
+  useEffect(() => {
+    axios
+      .get("http://127.0.0.1:8000/api/financial-data/", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setFinancialData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching financial data:", error);
+        setLoading(false);
+      });
+  }, [token]);
+
+  // Function to download files (PDF, CSV, JSON, etc.) using the export endpoint
   const downloadFile = (format) => {
     const url = `http://127.0.0.1:8000/api/export/${format.toLowerCase()}/`;
 
@@ -19,7 +39,9 @@ export default function Dashboard() {
       responseType: "blob",
     })
       .then((response) => {
-        const file = new Blob([response.data], { type: response.headers["content-type"] });
+        const file = new Blob([response.data], {
+          type: response.headers["content-type"],
+        });
         const fileURL = URL.createObjectURL(file);
         const a = document.createElement("a");
         a.href = fileURL;
@@ -34,15 +56,20 @@ export default function Dashboard() {
       });
   };
 
-  // Sample spending data (replace with dynamic data as needed)
-  const spendingData = [
-    { category: "Entertainment", amount: 714.25 },
-    { category: "Food", amount: 104.04 },
-    { category: "Shopping", amount: 917.55 },
-    { category: "Bills", amount: 523.97 },
-    { category: "Travel", amount: 312.85 },
-    { category: "Others", amount: 14.27 },
-  ];
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!financialData) {
+    return <div>Error loading financial data.</div>;
+  }
+
+  // Prepare spending data for the CategoryList and PieChart components.
+  // The API returns categories with a property "total_amount" which we map to "amount".
+  const spendingData = financialData.categories.map((cat) => ({
+    category: cat.category,
+    amount: cat.total_amount,
+  }));
 
   return (
     <div className="dashboard-wrapper">
@@ -51,8 +78,14 @@ export default function Dashboard() {
 
         {/* Metrics Section */}
         <section className="metrics">
-          <Card title="Total Spending" value="$4128.98" />
-          <Card title="Average Spending" value="$687.54" />
+          <Card
+            title="Total Spending"
+            value={`$${financialData.total_spending}`}
+          />
+          <Card
+            title="Average Spending"
+            value={`$${financialData.average_spending}`}
+          />
         </section>
 
         {/* Spending Categories & Chart */}
@@ -65,9 +98,18 @@ export default function Dashboard() {
         <section className="download-section">
           <h2>Download Your Financial Data</h2>
           <div className="download-buttons">
-            <DownloadButton format="PDF" onClick={() => downloadFile("PDF")} />
-            <DownloadButton format="CSV" onClick={() => downloadFile("CSV")} />
-            <DownloadButton format="JSON" onClick={() => downloadFile("JSON")} />
+            <DownloadButton
+              format="PDF"
+              onClick={() => downloadFile("PDF")}
+            />
+            <DownloadButton
+              format="CSV"
+              onClick={() => downloadFile("CSV")}
+            />
+            <DownloadButton
+              format="JSON"
+              onClick={() => downloadFile("JSON")}
+            />
           </div>
         </section>
       </main>
@@ -94,7 +136,9 @@ function CategoryList({ data }) {
         {data.map((item) => (
           <div key={item.category} className="spending-item">
             <span className="category-name">{item.category}</span>
-            <span className="category-amount">${item.amount.toFixed(2)}</span>
+            <span className="category-amount">
+              ${item.amount.toFixed(2)}
+            </span>
           </div>
         ))}
       </div>
