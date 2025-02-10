@@ -17,9 +17,9 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <nav className="nav-links">
-        <SidebarButton Icon={Home} text=" Home" to="/" />
-        <SidebarButton Icon={Plus} text=" Add Data" to="/add-data" />
-        <SidebarButton Icon={Grid} text=" View All" to="/view-all" />
+        <SidebarButton Icon={Home} text=" Home" to="/home" />
+        <SidebarButton Icon={Plus} text=" Add Data" to="/add-transaction" />
+        <SidebarButton Icon={Grid} text=" View All" to="/transactions" />
         <SidebarButton Icon={Settings} text=" Settings" to="/settings" />
       </nav>
       <div className="user">

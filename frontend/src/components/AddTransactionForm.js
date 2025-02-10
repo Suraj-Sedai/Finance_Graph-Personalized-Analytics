@@ -1,121 +1,146 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const AddTransactionForm = () => {
-    const [description, setDescription] = useState('');
-    const [amount, setAmount] = useState('');
-    const [category, setCategory] = useState('');
-    const [date, setDate] = useState('');
-    const [categories] = useState(['Food', 'Entertainment', 'Bills', 'Travel', 'Shopping']); // Static categories
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
-    const username = localStorage.getItem('username');
-    const token = localStorage.getItem('token');
+const categories = [
+  "Entertainment",
+  "Food",
+  "Shopping",
+  "Bills",
+  "Travel",
+  "Others",
+];
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+export default function AddData() {
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [category, setCategory] = useState(categories[0]);
+  const [price, setPrice] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
-        if (!description || !amount || !category || !date) {
-            setError('All fields are required.');
-            return;
-        }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (amount <= 0 || isNaN(amount)) {  // Additional check for NaN
-            setError('Amount must be a valid number greater than zero.');
-            return;
-        }
+    // Validate fields
+    if (!description || !date || !category || !price) {
+      setError("All fields are required.");
+      return;
+    }
+    if (parseFloat(price) <= 0 || isNaN(parseFloat(price))) {
+      setError("Price must be a valid number greater than zero.");
+      return;
+    }
 
-        const transactionData = {
-            description,
-            amount: parseFloat(amount),  // Convert to number
-            category,
-            date,
-        };
-
-        console.log("Sending transaction data:", transactionData);  // Debugging log
-
-        axios
-            .post('http://127.0.0.1:8000/api/transactions/', transactionData, {
-                headers: { Authorization: `Bearer ${token}` },
-            })
-            .then(() => {
-                alert('Transaction added successfully!');
-                setDescription('');
-                setAmount('');
-                setCategory('');
-                setDate('');
-                setError('');
-            })
-            .catch((error) => {
-                console.log("Error response:", error.response);  // Log the error response for debugging
-                if (error.response?.status === 401) {
-                    alert('Session expired. Please log in again.');
-                    localStorage.clear();
-                    navigate('/login');
-                } else {
-                    setError(error.response?.data?.detail || 'Failed to add transaction.');
-                }
-            });
+    // Prepare the data for the transaction
+    const transactionData = {
+      description,
+      amount: parseFloat(price), // Backend expects "amount"
+      category,
+      date, // Ensure this is in the correct format (YYYY-MM-DD)
     };
 
-    return (
-        <div className="transaction_container">
-            <button className="back_button" onClick={() => navigate('/home')}>
-                <span className="material-symbols-outlined">arrow_back_2</span> Back
-            </button>
-            <div className="user_info">
-                <span className="material-symbols-outlined user_icon">account_circle</span>
-                <p>{username}</p>
-            </div>
-            <div className="transaction_form_wrapper">
-                {error && <p className="error_message">{error}</p>}
-                <form className="transaction_form" onSubmit={handleSubmit}>
-                    <h2 className="form_heading">Add a New Transaction</h2>
-                    <input
-                        className="form_input"
-                        placeholder="Description"
-                        type="text"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    />
-                    <input
-                        className="form_input"
-                        placeholder="Amount"
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        required
-                    />
-                    <select
-                        className="form_select"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        required
-                    >
-                        <option value="">Select a category</option>
-                        {categories.map((categoryOption, index) => (
-                            <option key={index} value={categoryOption}>
-                                {categoryOption}
-                            </option>
-                        ))}
-                    </select>
-                    <input
-                        className="form_input"
-                        placeholder="Date"
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        required
-                    />
-                    <button className="form_button" type="submit">
-                        Add Transaction
-                    </button>
-                </form>
-            </div>
-        </div>
-    );
-};
+    console.log("Submitting transaction data:", transactionData);
 
-export default AddTransactionForm;
+    // Post the transaction data to the backend
+    axios
+      .post("http://127.0.0.1:8000/api/transactions/", transactionData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        alert("Transaction added successfully!");
+        // Reset the form fields
+        setDescription("");
+        setDate("");
+        setCategory(categories[0]);
+        setPrice("");
+        setError("");
+        // Optionally, navigate back to the dashboard or another page
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.error("Error response:", error.response);
+        // Log the complete error data to see what the backend is returning
+        console.error("Backend error data:", error.response?.data);
+        if (error.response?.status === 401) {
+          alert("Session expired. Please log in again.");
+          localStorage.clear();
+          navigate("/login");
+        } else {
+          setError(
+            error.response?.data?.detail ||
+              "Failed to add transaction. Check console for details."
+          );
+        }
+      });
+  };
+
+  return (
+    <div className="add-data-container">
+      <div className="add-data-wrapper">
+        <header className="add-data-header">
+          <Link to="/home" className="back-button">
+            <ArrowLeft className="icon" />
+            Back to Dashboard
+          </Link>
+          <h1>Add Data</h1>
+        </header>
+        {error && <p className="error-message">{error}</p>}
+        <form className="add-data-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <input
+              type="text"
+              id="description"
+              placeholder="Enter a description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="date">Date</label>
+            <input
+              type="date"
+              id="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="price">Price</label>
+            <input
+              type="number"
+              id="price"
+              step="0.01"
+              placeholder="Enter price"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="submit-button">
+            Add Data
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
