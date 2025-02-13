@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { User } from 'lucide-react';
 
 const SettingsPage = () => {
   const [username, setUsername] = useState('');
@@ -10,9 +11,6 @@ const SettingsPage = () => {
   const [message, setMessage] = useState('');
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-
-  // Default profile image URL (update this path as needed)
-  const defaultProfileUrl = '/static/images/default_profile.jpg';
 
   // Fetch current settings on mount
   useEffect(() => {
@@ -26,15 +24,16 @@ const SettingsPage = () => {
       })
       .then((response) => {
         setUsername(response.data.username);
-        // Use the profile_picture returned by the API or a default image
         if (response.data.profile_picture) {
           setPreviewUrl(response.data.profile_picture);
-        } else {
-          setPreviewUrl(defaultProfileUrl);
         }
       })
       .catch((error) => {
         console.error('Error fetching settings:', error);
+        // If you want more detail:
+        if (error.response) {
+          console.error('Server error details:', error.response.data);
+        }
       });
   }, [token, navigate]);
 
@@ -43,7 +42,6 @@ const SettingsPage = () => {
     const file = e.target.files[0];
     setProfilePicture(file);
     if (file) {
-      // Create a temporary URL for previewing the selected image
       setPreviewUrl(URL.createObjectURL(file));
     }
   };
@@ -53,7 +51,6 @@ const SettingsPage = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('username', username);
-    // Only send the password if user entered one
     if (password) {
       formData.append('password', password);
     }
@@ -72,15 +69,21 @@ const SettingsPage = () => {
         }
       );
       setMessage('Settings updated successfully!');
-      // Optionally update localStorage if the username or profile picture changed
       localStorage.setItem('username', response.data.username);
-      // Save the updated profile picture URL or use the default if not provided
-      localStorage.setItem(
-        'profilePicture',
-        response.data.profile_picture || defaultProfileUrl
-      );
+      if (response.data.profile_picture) {
+        localStorage.setItem('profilePicture', response.data.profile_picture);
+      } else {
+        localStorage.removeItem('profilePicture');
+      }
+      
+      // Reload the page or handle it another way so the Sidebar updates
+      window.location.reload();
     } catch (error) {
       console.error('Error updating settings:', error);
+      // If the server responded with details:
+      if (error.response) {
+        console.error('Server error details:', error.response.data);
+      }
       setMessage('Failed to update settings. Please try again.');
     }
   };
@@ -122,7 +125,11 @@ const SettingsPage = () => {
               accept="image/*"
             />
             <div className="profile_preview">
-              <img src={previewUrl} alt="Profile Preview" />
+              {previewUrl ? (
+                <img src={previewUrl} alt="Profile Preview" />
+              ) : (
+                <User className="profile_icon" />
+              )}
             </div>
           </div>
           <button type="submit" className="form_button">

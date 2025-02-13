@@ -38,15 +38,21 @@ class UserSettingsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = UserSettingsSerializer(request.user)
+        serializer = UserSettingsSerializer(request.user, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request):
-        serializer = UserSettingsSerializer(request.user, data=request.data, partial=True)
+        serializer = UserSettingsSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+            context={'request': request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

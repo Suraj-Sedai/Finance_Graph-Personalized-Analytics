@@ -1,14 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Home, Plus, Grid, Settings, LogOut, User } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  // Retrieve the username and profile picture URL from localStorage
-  const username = localStorage.getItem("username") || "Username";
-  const profilePicture = localStorage.getItem("profilePicture"); // URL of the uploaded profile picture
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || "Username"
+  );
+  const [profilePicture, setProfilePicture] = useState(
+    localStorage.getItem("profilePicture")
+  );
 
-  // Logout function clears token, username, and profilePicture then redirects
+  useEffect(() => {
+    // Update username from localStorage
+    const storedUsername = localStorage.getItem("username") || "Username";
+    setUsername(storedUsername);
+
+    // Check if profile picture is in localStorage
+    const storedProfilePicture = localStorage.getItem("profilePicture");
+    if (!storedProfilePicture) {
+      // If not, try fetching from the backend settings endpoint
+      const token = localStorage.getItem("token");
+      if (token) {
+        axios
+          .get("http://127.0.0.1:8000/api/settings/", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            if (response.data.profile_picture) {
+              setProfilePicture(response.data.profile_picture);
+              localStorage.setItem("profilePicture", response.data.profile_picture);
+            } else {
+              setProfilePicture(null);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user settings:", error);
+          });
+      }
+    } else {
+      setProfilePicture(storedProfilePicture);
+    }
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
@@ -42,7 +77,7 @@ export default function Sidebar() {
   );
 }
 
-// SidebarButton uses NavLink so that it automatically gets an "active" class when its route is active
+// SidebarButton uses NavLink so that it automatically gets an "active" class when its route is active.
 function SidebarButton({ Icon, text, to }) {
   return (
     <NavLink

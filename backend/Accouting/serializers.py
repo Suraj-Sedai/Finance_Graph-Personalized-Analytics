@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from .models import Transaction
 from django.core.exceptions import ValidationError
-# serializers.py
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile
 
 class UserSettingsSerializer(serializers.ModelSerializer):
-    # Use a SerializerMethodField to return the picture URL (or default if not set)
     profile_picture = serializers.SerializerMethodField()
     password = serializers.CharField(write_only=True, required=False)
 
@@ -19,32 +17,32 @@ class UserSettingsSerializer(serializers.ModelSerializer):
         try:
             pic = obj.profile.profile_picture
             if pic and hasattr(pic, "url"):
-                return pic.url
+                request = self.context.get('request')
+                # Build a full absolute URL
+                return request.build_absolute_uri(pic.url)
             else:
-                # Return a default image URL – make sure this file exists in your static files
-                return "/static/images/default_profile.jpg"
+                # Return None so that the frontend can show a default icon
+                return None
         except Exception:
-            return "/static/images/default_profile.jpg"
+            return None
 
     def update(self, instance, validated_data):
-        # Update username
         instance.username = validated_data.get('username', instance.username)
-
-        # Update password if provided
         password = validated_data.get('password', None)
         if password:
             instance.set_password(password)
         instance.save()
 
-        # Handle profile picture update
-        profile_data = validated_data.get('profile', {})
-        profile_picture = profile_data.get('profile_picture', None)
-        # Use get_or_create to ensure a Profile exists
+        # Use initial_data to get the file directly from FormData,
+        # since validated_data might not include the file under 'profile'
+        profile_picture = self.initial_data.get('profile_picture')
         profile, created = Profile.objects.get_or_create(user=instance)
         if profile_picture:
             profile.profile_picture = profile_picture
             profile.save()
         return instance
+
+
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
