@@ -10,8 +10,8 @@ const SignupForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Adjust the URL if necessary
-      await axios.post('http://127.0.0.1:8000/register/', {
+      // Updated URL to match your Django registration endpoint (adjust as needed)
+      await axios.post('http://127.0.0.1:8000/api/register/', {
         username,
         password,
       });

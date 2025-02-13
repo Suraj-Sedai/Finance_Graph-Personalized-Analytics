@@ -1,17 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { Home, Plus, Grid, Settings, LogOut } from "lucide-react";
+import axios from "axios";
+import { Home, Plus, Grid, Settings, LogOut, User } from "lucide-react";
 
 export default function Sidebar() {
   const navigate = useNavigate();
-  // Retrieve the username from localStorage (or receive it as a prop)
-  const username = localStorage.getItem("username") || "Username";
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || "Username"
+  );
+  const [profilePicture, setProfilePicture] = useState(
+    localStorage.getItem("profilePicture")
+  );
 
-  // Logout function clears the token and username then redirects
+  useEffect(() => {
+    // Update username from localStorage
+    const storedUsername = localStorage.getItem("username") || "Username";
+    setUsername(storedUsername);
+
+    // Check if profile picture is in localStorage
+    const storedProfilePicture = localStorage.getItem("profilePicture");
+    if (!storedProfilePicture) {
+      // If not, try fetching from the backend settings endpoint
+      const token = localStorage.getItem("token");
+      if (token) {
+        axios
+          .get("http://127.0.0.1:8000/api/settings/", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            if (response.data.profile_picture) {
+              setProfilePicture(response.data.profile_picture);
+              localStorage.setItem("profilePicture", response.data.profile_picture);
+            } else {
+              setProfilePicture(null);
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user settings:", error);
+          });
+      }
+    } else {
+      setProfilePicture(storedProfilePicture);
+    }
+  }, []);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
-    navigate("/"); // Change this route as needed (e.g., to a login page)
+    localStorage.removeItem("profilePicture");
+    navigate("/");
   };
 
   return (
@@ -24,10 +61,13 @@ export default function Sidebar() {
       </nav>
       <div className="user">
         <div className="user-info">
-          <div className="avatar"></div>
+          {profilePicture ? (
+            <img className="avatar" src={profilePicture} alt="User Avatar" />
+          ) : (
+            <User className="avatar default-avatar" />
+          )}
           <span className="username">{username}</span>
         </div>
-        {/* Use a button here for logout so that clicking it triggers our logout function */}
         <button className="sidebar-button logout-button" onClick={handleLogout}>
           <LogOut className="icon" />
           <span className="sidebar-text"> Log Out</span>
@@ -37,7 +77,7 @@ export default function Sidebar() {
   );
 }
 
-// SidebarButton uses NavLink so that it automatically gets an "active" class when its route is active
+// SidebarButton uses NavLink so that it automatically gets an "active" class when its route is active.
 function SidebarButton({ Icon, text, to }) {
   return (
     <NavLink

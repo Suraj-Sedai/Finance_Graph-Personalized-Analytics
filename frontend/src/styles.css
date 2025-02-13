@@ -508,29 +508,6 @@
   --transition-speed: 0.3s;
 }
 
-/* ===============================
-   Settings Page Container
-   =============================== */
-.settings-container {
-  min-height: 100vh;
-  background-color: var(--bg-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  color: var(--primary-color);
-}
-
-.settings-wrapper {
-  background-color: var(--sidebar-bg);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  max-width: 500px;
-  color: var(--primary-color);
-}
-
 /* Header & Back Button */
 .settings-header {
   text-align: center;
@@ -616,3 +593,267 @@
 .submit-button:hover {
   transform: scale(1.05);
 }
+/* ===============================
+   Login Page Styles
+   =============================== */
+   .login_container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--bg-color);
+  }
+  
+  .login_form {
+    background-color: var(--sidebar-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    width: 100%;
+    max-width: 400px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .form_heading {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+  }
+  
+  .form_input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: #222;
+    color: var(--primary-color);
+    transition: border-color var(--transition-speed) ease;
+  }
+  
+  .form_input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+  
+  .form_button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--accent-color);
+    color: #222;
+    cursor: pointer;
+    transition: transform var(--transition-speed) ease;
+    font-weight: 600;
+  }
+  
+  .form_button:hover {
+    transform: scale(1.05);
+  }
+  
+  .form_text {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  .form_link {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .form_link:hover {
+    text-decoration: underline;
+  }
+/* ===============================
+   Signup Page Styles
+   =============================== */
+   .signup_container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--bg-color);
+  }
+  
+  .signup_form {
+    background-color: var(--sidebar-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    width: 100%;
+    max-width: 400px;
+    color: var(--primary-color);
+    text-align: center;
+  }
+  
+  .form_heading {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-color);
+  }
+  
+  .form_input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: #222;
+    color: var(--primary-color);
+    transition: border-color var(--transition-speed) ease;
+  }
+  
+  .form_input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+  
+  .form_button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--accent-color);
+    color: #222;
+    cursor: pointer;
+    transition: transform var(--transition-speed) ease;
+    font-weight: 600;
+  }
+  
+  .form_button:hover {
+    transform: scale(1.05);
+  }
+  
+  .form_text {
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
+  
+  .form_link {
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+  
+  .form_link:hover {
+    text-decoration: underline;
+  }
+    
+  .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .default-avatar {
+    width: 50px;
+    height: 50px;
+    color: var(--primary-color);
+  }
+  
+/* ===============================
+   Settings Page Styles
+   =============================== */
+   .settings_container {
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  }
+  
+  .settings_wrapper {
+    background-color: var(--sidebar-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+    width: 100%;
+    max-width: 500px;
+    color: var(--primary-color);
+  }
+  
+  .settings_header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .settings_header h1 {
+    font-size: 2rem;
+    color: var(--accent-color);
+  }
+  
+  .settings_form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form_group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form_group label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .form_input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: #222;
+    color: var(--primary-color);
+    transition: border-color var(--transition-speed) ease;
+  }
+  
+  .form_input:focus {
+    border-color: var(--accent-color);
+    outline: none;
+  }
+  
+  .form_button {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: var(--accent-color);
+    color: #222;
+    cursor: pointer;
+    transition: transform var(--transition-speed) ease;
+    font-weight: 600;
+  }
+  
+  .form_button:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Profile Preview Styling */
+  .profile_preview {
+    margin-top: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile_preview img,
+  .profile_icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent-color);
+    color: var(--primary-color); /* For the default icon */
+  }
+  

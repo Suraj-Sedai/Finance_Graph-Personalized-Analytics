@@ -6,6 +6,7 @@ import HomePage from './components/HomePage';
 import AddTransactionForm from './components/AddTransactionForm';
 import TransactionList from './components/TransactionList';
 import FinancialAnalytics from './components/FinancialAnalytics';
+import SettingsPage from './components/SettingsPage';  // New Settings page component
 import ProtectedRoute from './components/ProtectedRoute'; // Your authentication wrapper
 import Layout from './components/Layout'; // Import the layout
 import "./styles.css";  // Import your CSS file
@@ -56,6 +57,16 @@ const App = () => {
             <ProtectedRoute>
               <Layout>
                 <FinancialAnalytics />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/settings" 
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <SettingsPage />
               </Layout>
             </ProtectedRoute>
           }
