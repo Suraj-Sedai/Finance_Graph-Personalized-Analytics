@@ -1,161 +1,127 @@
-Finance Management Web Application
----------------------
+# 🚀 Finance Management Web Application
 
-This is a comprehensive web application for managing personal finances, tracking transactions, calculating spending, and generating financial analytics, including visual representations like pie charts. The application is built using Django (backend) and React (frontend), with integrated features for user authentication, registration, transaction management, and analytics visualization.
+## 📌 Overview
+Take control of your personal finances with our powerful web application! Track transactions, analyze spending, and gain financial insights with dynamic charts and data export capabilities.
 
-Features
----------------------
+## 🎯 Key Features
+- ✅ Secure User Authentication - Register, log in, and manage accounts with JWT authentication.
+- ✅ Transaction Management - Easily add, view, and delete financial transactions.
+- ✅ Powerful Analytics - Get insights into total spending, average spending, and spending by category.
+- ✅ Interactive Data Visualization - View financial breakdowns with dynamic pie charts and reports.
+- ✅ Fully Responsive - Enjoy a seamless experience across mobile and desktop devices.
+- ✅ Data Export - Download financial reports in CSV, JSON, or PDF formats.
+- ✅ Profile Customization - Upload and manage profile pictures for a personalized experience.
 
-• User Authentication: Users can register, log in, and manage their accounts.
+## 🛠️ Tech Stack
+🎯 Backend:
+- Django - Robust backend framework
+- Django REST Framework - API management
+- NumPy & Pandas - Financial data analytics
+- Matplotlib - Data visualization
+- PostgreSQL - Scalable production database
 
-• Transaction Management: Users can add, view, and delete financial transactions.
+🎨 Frontend:
+- React - Fast and interactive UI
+- Axios - API communication
+- Chart.js - Financial data visualization
+- React Router - Seamless navigation
 
-• Financial Analytics: Real-time data analytics showing total spending, average spending, and spending by category.
+## 🚀 Getting Started
+### ✅ Prerequisites:
+- Python (3.x)
+- Node.js & npm
+- PostgreSQL (for production)
 
-• Pie Chart Visualization: A dynamic pie chart representing the user’s spending breakdown by category.
+### 🏗 Backend Setup:
+```bash
+# Clone the repository
+git clone <https://github.com/Suraj-Sedai/Finance_Graph-Personalized-Analytics>
 
-• Responsive Design: The application is fully responsive for both mobile and desktop devices.
+# Navigate to the backend
+cd backend/
 
-• JWT Authentication: Secure authentication using JSON Web Tokens (JWT) for API requests.
+# Set up a virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-• Data Export: Users can export their financial data in CSV, JSON, or PDF format.
+# Install dependencies
+pip install -r requirements.txt
 
-Technologies Used
----------------------
+# Apply database migrations
+python manage.py migrate
 
-• Backend: Django, Django REST Framework
+# Create a superuser (optional)
+python manage.py createsuperuser
 
-• Frontend: React, Axios
+# Start the backend server
+python manage.py runserver
+```
 
-• Data Analytics: NumPy, Pandas
+### 🎨 Frontend Setup:
+```bash
+# Navigate to the frontend
+cd frontend/
 
-• Data Visualization: Matplotlib (for pie charts)
+# Install dependencies
+npm install
 
-• Database: SQLite (for development), can be switched to other databases like PostgreSQL for production
+# Start the frontend server
+npm start
+```
 
-Setup Instructions
----------------------
+## ⚙️ Configuration:
+```bash
+# API Configuration: Update API_BASE_URL in frontend/src/api.js to match your backend URL.
+# JWT Handling: Store authentication tokens in localStorage for seamless authentication.
+```
 
-Prerequisites
----------------------
+## 🔗 API Endpoints:
+```bash
+# 🔐 Authentication:
+POST /api/register/ - User registration
+POST /api/token/ - Obtain JWT token
 
-Ensure you have the following installed on your system:
+# 💰 Transactions:
+GET /api/transactions/ - Retrieve user transactions
+POST /api/transactions/ - Add a new transaction
 
-• Python (3.x)
+# 📊 Analytics & Export:
+GET /api/financial-data/ - Fetch financial summaries
+GET /api/category-spending-pie-chart/ - View spending by category
+GET /api/export/csv/ - Export transactions in CSV
+GET /api/export/json/ - Export transactions in JSON
+GET /api/export/pdf/ - Export transactions in PDF
+```
 
-• Node.js (for React frontend)
+## 🎨 Frontend Features:
+```bash
+# 💡 Dashboard - View financial analytics and interactive charts.
+# 📄 Transaction List - Manage your financial transactions efficiently.
+# 📤 Download Reports - Export financial data in multiple formats.
+# 🛠 Profile Management - Customize your user experience with profile settings and picture upload.
+# ⚡ Error Handling - Get proper error messages for API failures.
+```
 
-• npm (for managing frontend packages)
+## 🚀 Future Enhancements:
+```bash
+# 🔹 Multi-User Support - Shared finance tracking for families or teams.
+# 🔹 Advanced Reports - Monthly/yearly spending insights.
+# 🔹 Cloud Integration - Store reports securely using AWS S3.
+# 🔹 AI-Powered Insights - Predictive analytics to manage spending efficiently.
+```
 
-• SQLite (or another preferred database)
+## 📜 License
+```bash
+# This project is licensed under the MIT License - see the LICENSE file for details.
+```
 
-Backend Setup
----------------------
+## 🤝 Contribution
+```bash
+# Contributions are welcome! Feel free to open an issue or submit a pull request.
+```
 
-1. Clone the repository:
-   ```
-   git clone <https://github.com/Suraj-Sedai/Finance_Graph-Personalized-Analytics>
-   ```
-2. Navigate to the backend directory:
-   ```
-   cd backend/
-   ```
-3. Create a virtual environment (optional but recommended):
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use venv\Scripts\activate
-   ```
-4. Install the required Python packages:
-   ```
-   pip install -r requirements.txt
-   ```
-5. Apply migrations to set up the database:
-   ```
-   python manage.py migrate
-   ```
-6. Create a superuser for accessing the admin panel (optional):
-   ```
-   python manage.py createsuperuser
-   ```
-7. Start the backend server:
-   ```
-   python manage.py runserver
-   ```
-
-Frontend Setup
----------------------
-
-1. Navigate to the frontend directory:
-   ```
-   cd frontend/
-   ```
-2. Install the required frontend packages:
-   ```
-   npm install
-   ```
-3. Start the frontend development server:
-   ```
-   npm start
-   ```
-
----------------------
-
-Configuration
----------------------
-
-• Update the API_BASE_URL in the frontend code (frontend/src/api.js) to point to the backend server if not running locally.
-
-• Set up JWT token handling and store it in localStorage for user authentication.
-
-API Endpoints
----------------------
-
-• POST `/api/register/`: User registration endpoint.
-
-• POST `/api/token/`: Obtain a JWT token for authentication.
-
-• GET `/api/transactions/`: Retrieve all transactions for the authenticated user.
-
-• POST `/api/transactions/`: Add a new transaction for the authenticated user.
-
-• GET `/api/financial-data/`: Fetch total spending, average spending, and spending by category for the authenticated user.
-
-• GET `/api/category-spending-pie-chart/`: Generate a pie chart showing spending by category.
-
-• GET `/api/export/csv/`: Export financial data in CSV format.
-
-• GET `/api/export/json/`: Export financial data in JSON format.
-
-• GET `/api/export/pdf/`: Export financial data in PDF format.
-
-Frontend Details
----------------------
-
-• Login & Signup Forms: User-friendly forms to handle login and registration.
-
-• Dashboard: Displays financial data (total, average, and category-wise spending) along with a pie chart visualization.
-
-• Transaction List: Allows users to view, add, and manage their transactions.
-
-• Export Data: Users can download their financial data in CSV, JSON, or PDF format.
-
-• Responsive Design: The UI adapts to different screen sizes for a smooth experience across devices.
-
-Error Handling
----------------------
-
-• All API responses include relevant status codes to indicate success or failure.
-
-• JWT token expiration (401 Unauthorized) results in automatic logout and redirection to the login page.
-
-Future Improvements
----------------------
-
-• Multi-user support: Adding support for multiple users in a single application.
-
-• Advanced Analytics: Introduce more detailed financial reports (e.g., monthly/yearly analysis).
-
-• Cloud Database: Use a cloud database like PostgreSQL or MySQL for production environments.
-
-• User Profile: Enhance the user profile section with additional settings and preferences.
+## 📞 Support
+```bash
+# For any queries or support, contact Suraj Sedai at <surajsedai05@gmail.com>
+```
 
