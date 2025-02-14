@@ -125,3 +125,21 @@ GET /api/export/pdf/ - Export transactions in PDF
 # For any queries or support, contact Suraj Sedai at <surajsedai05@gmail.com>
 ```
 
+## 📸 Screenshots
+
+### Login Page:
+![Login Page](https://github.com/user-attachments/assets/aac1c366-36a2-454a-96aa-37150bfe27ef)
+
+### Dashboard:
+![Dashboard](https://github.com/user-attachments/assets/f95eaa17-b595-4538-bac5-674a505b5081)
+![Dashboard View](https://github.com/user-attachments/assets/24b0071c-ee4d-4e7d-bf74-9a258bae6c61)
+
+### Add Data Page:
+![Add Data](https://github.com/user-attachments/assets/b44d99d8-02ab-4492-acb8-efaa713c69ce)
+
+### View Data Page:
+![View Data](https://github.com/user-attachments/assets/d1596c9b-a1e5-477e-b4f5-c0f660a33527)
+
+### Settings Page:
+![Settings](https://github.com/user-attachments/assets/71ac06fb-2339-4e60-9eb3-d58aeff139a6)
+
