@@ -95,6 +95,7 @@ export default function Dashboard() {
         {/* Spending Categories & Chart */}
         <section className="spending-section">
           <CategoryList data={spendingData} />
+          <monthList data={spendingData} />
           <ChartCard data={spendingData} />
         </section>
 
@@ -140,6 +141,25 @@ function CategoryList({ data }) {
         {data.map((item) => (
           <div key={item.category} className="spending-item">
             <span className="category-name">{item.category}</span>
+            <span className="category-amount">
+              ${item.amount.toFixed(2)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+//component to disply spending by months
+function MonthList({ data }) {
+  return (
+    <div className="card category-card">
+      <h3>Spending by Month</h3>
+      <div className="category-list">
+        {data.map((item) => (
+          <div key={item.month} className="spending-item">
+            <span className="category-name">{item.month}</span>
             <span className="category-amount">
               ${item.amount.toFixed(2)}
             </span>
@@ -199,9 +219,10 @@ function PieChart({ data }) {
         responsive: true,
         plugins: {
           legend: {
-            position: "right",
+            position: "top",
             labels: {
               color: "#fff",
+              font: { size: 14 },
             },
           },
         },

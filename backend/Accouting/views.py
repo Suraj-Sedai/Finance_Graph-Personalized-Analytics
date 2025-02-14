@@ -59,6 +59,7 @@ class UserSettingsView(APIView):
 def export_financial_data(request, format_type):
     user = request.user
     transactions = Transaction.objects.filter(user=user)
+    months = transactions.values('date').annotate(amount=Sum('amount'))
 
     # Prepare financial summary
     total_spending = transactions.aggregate(Sum('amount'))['amount__sum'] or 0
@@ -84,6 +85,13 @@ def export_financial_data(request, format_type):
             }
             for t in transactions
         ],
+        "Transactions by Month": [
+            {
+                "Month": t.date.strftime("%Y-%m-%d"),
+                "Price": float(t.amount)
+            }
+            for t in months
+        ],
     }
 
     # Handle CSV export
@@ -99,7 +107,7 @@ def export_financial_data(request, format_type):
         for cat in categories:
             writer.writerow([cat["category"], float(cat["total_amount"])]);
         writer.writerow([])
-        writer.writerow(["Description", "Category", "Date", "Price"])
+        writer.writerow(["Description", "Category", "Date", "Price",])
         for t in transactions:
             writer.writerow([t.description, t.category, t.date.strftime("%Y-%m-%d"), float(t.amount)])
         return response
@@ -129,6 +137,10 @@ def export_financial_data(request, format_type):
         for t in transactions:
             p.drawString(120, y, f"{t.date.strftime('%Y-%m-%d')} - {t.category} - {t.description} - ${float(t.amount)}")
             y -= 20
+        
+        for m in months:
+            p.drawString(120, y, f"{m.date.strftime('%Y-%m-%d')} - ${float(m.amount)}")
+            y -= 20
         p.save()
         return response
 
@@ -144,12 +156,19 @@ class FinancialDataView(APIView):
         average_spending = np.mean(amounts) if len(amounts) > 0 else 0
         #total transitions number
         total_transitions = user_transactions.count()
+        #get sepnding by month
+        month = user_transactions.values('date__month').annotate(total_amount=Sum('amount'))
+
+
         categories = user_transactions.values('category').annotate(total_amount=Sum('amount'))
 
         data = {
             'total_spending': total_spending,
             'average_spending': average_spending,
             'total_transitions': total_transitions,
+            'spending_by_month': [
+                {'month': cat['date__month'], 'total_amount': cat['total_amount']} for cat in month
+            ],
             'categories': [
                 {'category': cat['category'], 'total_amount': cat['total_amount']} for cat in categories
             ],
