@@ -73,7 +73,7 @@ def export_financial_data(request, format_type):
         "Username": user.username,
         "Total Spending": float(total_spending),
         "Average Spending": float(average_spending),
-        "Total: transitions": total_transitions,
+        "Total: transitions": float(total_transitions),
         "Spending by Category": [{cat["category"]: float(cat["total_amount"])} for cat in categories],
         "Transactions": [
             {
@@ -118,7 +118,8 @@ def export_financial_data(request, format_type):
         p.drawString(100, 750, f"Financial Report for {user.username}")
         p.drawString(100, 730, f"Total Spending: ${total_spending}")
         p.drawString(100, 710, f"Average Spending: ${average_spending}")
-        p.drawString(100, 690, "Spending by Category:")
+        p.drawString(100, 690, f"Total transitions: {total_transitions}")
+        p.drawString(100, 650, "Spending by Category:")
         y = 670
         for cat in categories:
             p.drawString(120, y, f"- {cat['category']}: ${float(cat['total_amount'])}")
