@@ -59,6 +59,7 @@ const FinancialAnalytics = () => {
                     <>
                         <h2>Total Spending: ${financialData.total_spending}</h2>
                         <h2>Average Spending: ${financialData.average_spending}</h2>
+                        <h2>Total Transitions: ${financialData.total_transitions}</h2>
                         <h2>Spending by Category:</h2>
                         {financialData.categories.length > 0 ? (
                             <ul>

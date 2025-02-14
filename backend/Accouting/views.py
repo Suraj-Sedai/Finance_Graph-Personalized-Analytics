@@ -64,12 +64,16 @@ def export_financial_data(request, format_type):
     total_spending = transactions.aggregate(Sum('amount'))['amount__sum'] or 0
     average_spending = transactions.aggregate(avg_spending=Sum('amount') / transactions.count())['avg_spending'] or 0
     categories = transactions.values('category').annotate(total_amount=Sum('amount'))
+    #total transitions number
+    total_transitions = transactions.count()
+
 
     # Prepare transaction data
     data = {
         "Username": user.username,
         "Total Spending": float(total_spending),
         "Average Spending": float(average_spending),
+        "Total: transitions": total_transitions,
         "Spending by Category": [{cat["category"]: float(cat["total_amount"])} for cat in categories],
         "Transactions": [
             {
@@ -137,11 +141,14 @@ class FinancialDataView(APIView):
         amounts = np.array([float(transaction.amount) for transaction in user_transactions])
         total_spending = np.sum(amounts) if len(amounts) > 0 else 0
         average_spending = np.mean(amounts) if len(amounts) > 0 else 0
+        #total transitions number
+        total_transitions = user_transactions.count()
         categories = user_transactions.values('category').annotate(total_amount=Sum('amount'))
 
         data = {
             'total_spending': total_spending,
             'average_spending': average_spending,
+            'total_transitions': total_transitions,
             'categories': [
                 {'category': cat['category'], 'total_amount': cat['total_amount']} for cat in categories
             ],

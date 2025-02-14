@@ -86,6 +86,10 @@ export default function Dashboard() {
             title="Average Spending"
             value={`$${financialData.average_spending}`}
           />
+          <Card>
+            title="Total Transactions"
+            value={`$${financialData.total_transitions}`}
+          </Card>
         </section>
 
         {/* Spending Categories & Chart */}
