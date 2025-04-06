@@ -1,4 +1,4 @@
-# 🚀 Finance Management Web Application
+# 🚀 FinGenius- Finance Management Web Application
 
 ## 📌 Overview
 Take control of your personal finances with our powerful web application! Track transactions, analyze spending, and gain financial insights with dynamic charts and data export capabilities.
